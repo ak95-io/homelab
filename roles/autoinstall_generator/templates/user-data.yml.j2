@@ -1,0 +1,119 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: {{ cloud_init.locale }}
+  keyboard:
+    layout: {{ cloud_init.keyboard_layout }}
+  refresh-installer:
+    update: true
+  apt:
+    geoip: true
+    preserve_sources_list: false
+  network:
+    network:
+      renderer: networkd
+      version: 2
+      ethernets:
+        interface0:
+          match:
+            name: ens*
+          dhcp4: true
+  storage:
+    config:
+      - grub_device: true
+        id: disk-sda
+        name: ''
+        path: {{ cloud_init.storage.device }}
+        preserve: false
+        ptable: gpt
+        model: {{ cloud_init.storage.model }}
+        type: disk
+        wipe: superblock
+
+      - device: disk-sda
+        flag: bios_grub
+        grub_device: false
+        id: partition-0
+        number: 1
+        preserve: false
+        size: 1M
+        type: partition
+
+      - device: disk-sda
+        flag: ''
+        grub_device: false
+        id: partition-1
+        number: 2
+        preserve: false
+        size: 2G
+        type: partition
+        wipe: superblock
+
+      - fstype: ext4
+        id: format-0
+        preserve: false
+        type: format
+        volume: partition-1
+
+      - device: disk-sda
+        flag: ''
+        grub_device: false
+        id: partition-2
+        number: 3
+        preserve: false
+        size: -1
+        type: partition
+        wipe: superblock
+
+      - devices:
+        - partition-2
+        id: lvm_volgroup-0
+        name: ubuntu-vg
+        preserve: false
+        type: lvm_volgroup
+
+      - id: lvm_partition-0
+        name: ubuntu-lv
+        preserve: false
+        size: -1
+        type: lvm_partition
+        volgroup: lvm_volgroup-0
+        wipe: superblock
+
+      - fstype: ext4
+        id: format-2
+        preserve: false
+        type: format
+        volume: lvm_partition-0
+
+      - device: format-2
+        id: mount-2
+        path: /
+        type: mount
+
+      - device: format-0
+        id: mount-0
+        path: /boot
+        type: mount
+    grub:
+      reorder_uefi: False
+    swap:
+      size: 0
+  identity:
+    hostname: change-me
+    username: {{ cloud_init.user }}
+    password: {{ cloud_initPassword | mandatory }}
+  ssh:
+    install-server: true
+    authorized-keys: {{ cloud_init.authorized_keys | from_yaml | to_json }}
+    allow-pw: true
+  timezone: {{ cloud_init.timezone }}
+  updates: all
+  user-data:
+    disable_root: false
+  late-commands:
+    - echo '{{ cloud_init.user }} ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/{{ cloud_init.user }}
+    - chmod 440 /target/etc/sudoers.d/{{ cloud_init.user }}
+    - echo "changeme-"$(tr -dc a-z0-9 </dev/urandom | head -c 16 ; echo '') > /target/etc/hostname
+    - chmod -x /target/etc/update-motd.d/10-help-text /target/etc/update-motd.d/50-motd-news
+  shutdown: reboot

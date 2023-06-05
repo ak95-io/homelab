@@ -1,0 +1,11 @@
+cloud_init:
+  user: "aam"
+  authorized_keys:
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCPCeqDxLSZz/1BVTQu62dU+D+mowjZc3aNE1HGbnUo" # aamkye@github.com
+  password:
+  locale: "en_US.UTF-8"
+  keyboard_layout: "pl"
+  timezone: "Europe/Warsaw"
+  storage:
+    device: "/dev/sda"
+    model: "QEMU_HARDDISK"

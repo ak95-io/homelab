@@ -1,0 +1,6 @@
+---
+- name: "Install requirements"
+  ansible.builtin.include_tasks: requirements.yml
+
+- name: "Git clone"
+  ansible.builtin.include_tasks: git_clone.yml

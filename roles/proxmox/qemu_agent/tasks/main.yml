@@ -1,0 +1,15 @@
+---
+- name: Install qemu-guest-agent
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.package:
+    name: qemu-guest-agent
+    state: latest # noqa: package-latest
+    update_cache: true
+
+- name: Enable qemu-guest-agent
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.service:
+    name: qemu-guest-agent
+    enabled: true
+    state: started
+    daemon_reload: true

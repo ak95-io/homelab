@@ -1,0 +1,17 @@
+---
+replicaCount: 1
+installCRDs: true
+
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    honorLabels: true
+
+extraArgs: [
+  # --dns01-recursive-nameservers-only,
+  --dns01-recursive-nameservers=1.1.1.1:53,
+  --dns01-recursive-nameservers=8.8.8.8:53,
+  # -v=7
+]
+

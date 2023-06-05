@@ -1,0 +1,26 @@
+---
+- name: Install zfs packages
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.shell: |
+    shopt -s extglob
+    apt install ./*.deb
+  args:
+    executable: /bin/bash
+    chdir: /opt/zfs
+  register: install_packages
+  changed_when: install_packages.rc == 0
+
+- name: Ensure zfs-related systemd units are enabled
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - zfs-import-cache
+    - zfs-import.target
+    - zfs-mount
+    - zfs-share
+    - zfs-zed
+    - zfs-volume-wait
+    - zfs.target

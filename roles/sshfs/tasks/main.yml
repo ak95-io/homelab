@@ -1,0 +1,9 @@
+---
+- name: "Create group"
+  ansible.builtin.include_tasks: group.yml
+
+- name: "Create user"
+  ansible.builtin.include_tasks: user.yml
+
+- name: "Authrized keys"
+  ansible.builtin.include_tasks: authorized_keys.yml

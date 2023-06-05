@@ -1,0 +1,16 @@
+---
+- name: All in one playbook
+  hosts: "{{ target | default('scraper.dc0.ak95.io') }}"
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: sudoers }
+    - { role: general/ssh_config } # noqa: role-name[path]
+    - { role: apps }
+    - { role: sshfs_mount }
+    - { role: general/unattended_upgrades } # noqa: role-name[path]
+    - { role: proxmox/qemu_agent } # noqa: role-name[path]
+
+    - { role: proton_vpn_community }
+    - { role: docker }
+    - { role: deluge_server }

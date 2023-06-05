@@ -1,0 +1,12 @@
+---
+- name: Create user operations
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.user:
+    comment: Operations users for /mnt
+    name: operations
+    uid: 2000
+    group: operations
+    groups: operations
+    append: false
+    # remove: false
+    # state: absent

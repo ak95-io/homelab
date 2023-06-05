@@ -1,0 +1,14 @@
+---
+- name: Install mainline kernel
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.shell: |
+    sudo mainline \
+      {% if mainline_kernel_version == "latest" %} \
+        --install-latest \
+      {% else %} \
+        --install {{ mainline_kernel_version }} \
+      {% endif %} --yes
+  args:
+    executable: /bin/bash
+  register: install_mainline_kernel
+  changed_when: install_mainline_kernel.rc == 0

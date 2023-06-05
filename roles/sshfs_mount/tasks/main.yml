@@ -1,0 +1,43 @@
+---
+- name: "Install package sshfs"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.package:
+    name: sshfs
+    state: present
+    update_cache: true
+
+- name: "Create .ssh folder"
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.ssh"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: "Install ssh key for current user"
+  ansible.builtin.template:
+    src: ssh.eddsa.nas.prv.j2
+    dest: "{{ ansible_user_dir }}/.ssh/ssh.eddsa.nas.prv"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"
+
+- name: "Create /mnt/torrent folder"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.file:
+    path: /mnt/torrent
+    state: directory
+    mode: "0755"
+
+- name: "Add entry in /etc/fstab for sshfs"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: "/mnt/torrent"
+    line: "operations@nas.dc0.ak95.io:/mnt/elephant/torrent /mnt/torrent fuse.sshfs noauto,x-systemd.automount,_netdev,reconnect,follow_symlinks,idmap=user,uid=1000,gid=1000,default_permissions,allow_other,identityfile={{ ansible_user_dir }}/.ssh/ssh.eddsa.nas.prv,stricthostkeychecking=no 0 0" # noqa: yaml[line-length]
+    state: present
+
+- name: "Run `systemctl daemon-reload`"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.systemd:
+    daemon_reload: true

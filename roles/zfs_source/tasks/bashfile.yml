@@ -1,0 +1,30 @@
+---
+- name: Add aliases to bashrc
+  ansible.builtin.blockinfile:
+    path: ~/.bashrc
+    marker: "# zfs {mark} ANSIBLE MANAGED BLOCK"
+    block: |
+      function zload() {
+        sudo zfs load-key -L prompt $1 && sudo zfs mount $1
+      }
+
+      function zunload() {
+        sudo zfs unmount -f $1 && sudo zfs unload-key $1
+      }
+
+      alias dev-disk-by-id="ls -l /dev/disk/by-id/* | \
+        grep -E '(scsi-SATA_WD|nvme-[^e]).*[A-Z0-9]{5}\W\->' | \
+        tr -s ' ' | cut -d ' ' -f 9,11 | sed -e 's,\.\.\/\.\.,/dev,g'"
+
+      function apt-key-fix() {
+        for KEY in $( \
+          apt-key --keyring /etc/apt/trusted.gpg list | \
+            grep -E "(([ ]{1,2}(([0-9A-F]{4}))){10})" | \
+            tr -d " " | \
+            grep -E "([0-9A-F]){8}\b" \
+        ); do
+          K=${KEY:(-8)}
+          apt-key export $K | \
+            sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/imported-from-trusted-gpg-$K.gpg
+        done
+      }

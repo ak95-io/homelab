@@ -1,0 +1,7 @@
+---
+- name: ZFS
+  hosts: "{{ target | default('nas.dc0.ak95.io') }}"
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: zfs_source }

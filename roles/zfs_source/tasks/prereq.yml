@@ -1,0 +1,53 @@
+---
+- name: Ensure packages are installed # noqa: package-latest
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.package:
+    name:
+      - build-essential
+      - autoconf
+      - automake
+      - libtool
+      - gawk
+      - alien
+      - fakeroot
+      - dkms
+      - libblkid-dev
+      - uuid-dev
+      - libudev-dev
+      - libssl-dev
+      - zlib1g-dev
+      - libaio-dev
+      - libattr1-dev
+      - libelf-dev
+      - linux-headers-generic
+      - python3
+      - python3-dev
+      - python3-setuptools
+      - python3-cffi
+      - libffi-dev
+      - python3-packaging
+      - git
+      - libcurl4-openssl-dev
+      # native-deb-utils
+      - dh-python
+      - libpam0g-dev
+      - python3-all-dev
+      - python3-sphinx
+    state: latest
+    update_cache: true
+
+- name: Add line into the depmod configuration file
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.lineinfile:
+    dest: /etc/depmod.d/ubuntu.conf
+    regexp: '^(search updates ubuntu built-in)$'
+    line: '\1 extra'
+    backrefs: true
+
+- name: Hold all zfs-related upstream packages
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.shell: |
+    apt-mark hold zfsutils-linux
+    apt-mark hold zfs-zed
+  register: hold_packages
+  changed_when: hold_packages.rc == 0

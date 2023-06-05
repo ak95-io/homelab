@@ -1,0 +1,9 @@
+---
+- name: "Install packages"
+  ansible.builtin.include_tasks: packages.yml
+
+- name: "Install kernel"
+  ansible.builtin.include_tasks: kernel.yml
+
+- name: "Reboot"
+  ansible.builtin.include_tasks: reboot.yml

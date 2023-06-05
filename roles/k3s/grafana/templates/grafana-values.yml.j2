@@ -1,0 +1,53 @@
+grafana.ini:
+  server:
+    domain: "grafana.dc0.ak95.io"
+
+image:
+  tag: "latest"
+
+service:
+  portName: grafana
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3000"
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: '{% if prod_issuer | default("false") | bool %}letsencrypt-prod{% else %}letsencrypt-staging{% endif %}'
+  hosts:
+    - "grafana.dc0.ak95.io"
+  tls:
+    - secretName: 'grafana-dc0-ak95-io-cert-{% if prod_issuer | default("false") | bool %}prod{% else %}staging{% endif %}'
+      hosts:
+        - "grafana.dc0.ak95.io"
+
+persistence:
+  enabled: true
+  storageClassName: longhorn
+  size: 2Gi
+
+adminUser: admin
+adminPassword: admin
+
+plugins:
+  - digrich-bubblechart-panel
+  - grafana-piechart-panel
+
+datasources:
+  prometheus.yaml:
+    apiVersion: 1
+    datasources:
+      - access: proxy
+        editable: true
+        name: prometheus-raw
+        orgId: 1
+        type: prometheus
+        url: http://prometheus.dc0.ak95.io
+        version: 1
+
+imageRenderer:
+  enabled: true
+
+readinessProbe: false
+livenessProbe: false

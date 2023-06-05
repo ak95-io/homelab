@@ -1,0 +1,17 @@
+---
+- name: Ensure packages are installed
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.package:
+    name:
+      - git
+      - parallel
+      - jq
+      - ffmpeg
+    state: latest # noqa: package-latest
+    update_cache: true
+
+- name: Install bottle into the specified (virtualenv), inheriting globally installed modules
+  ansible.builtin.pip:
+    name:
+      - yt-dlp
+    executable: "~/.pyenv/shims/pip"

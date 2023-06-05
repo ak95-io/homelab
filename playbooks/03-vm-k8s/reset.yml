@@ -1,0 +1,10 @@
+---
+- name: Clean K3S
+  hosts: "{{ target | default('k3s_master:k3s_node') }}"
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: Run cleanup
+      ansible.builtin.include_role:
+        name: k3s/install # noqa: role-name[path]
+        tasks_from: __reset.yml

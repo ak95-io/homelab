@@ -1,0 +1,4 @@
+---
+- name: "Edit grub"
+  ansible.builtin.include_tasks: edit.yml
+  when: grub_line is defined

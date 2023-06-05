@@ -1,0 +1,6 @@
+- name: Add .ssh/config file
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.template:
+    src: config.j2
+    mode: '0644'
+    dest: "{{ ansible_user_dir }}/.ssh/config"

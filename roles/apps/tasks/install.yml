@@ -1,0 +1,15 @@
+---
+- name: Ensure packages are installed # noqa: package-latest
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.package:
+    name:
+      - tree
+      - httpie
+      - smartmontools
+      - git
+      - net-tools
+      - bash-completion
+      - exa
+      - apt-utils
+    state: latest
+    update_cache: true

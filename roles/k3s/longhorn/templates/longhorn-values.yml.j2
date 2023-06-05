@@ -1,0 +1,33 @@
+---
+persistence:
+  defaultClassReplicaCount: 1
+  defaultDataLocality: best-effort
+
+longhornManager:
+  serviceAnnotations: {
+    prometheus.io/scrape: 'true',
+    prometheus.io/port: '9500',
+    prometheus.io/path: '/metrics',
+  }
+
+longhornUI:
+  replicas: 1
+
+longhornConversionWebhook:
+  replicas: 1
+
+longhornAdmissionWebhook:
+  replicas: 1
+
+longhornRecoveryBackend:
+  replicas: 1
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: {% if prod_issuer | default("false") | bool %}letsencrypt-prod{% else %}letsencrypt-staging{% endif %}
+
+  host: longhorn.dc0.ak95.io
+  tls: true
+  secureBackends: true
+  tlsSecret: longhorn-dc0-ak95-io-cert-{% if prod_issuer | default("false") | bool %}prod{% else %}staging{% endif %}

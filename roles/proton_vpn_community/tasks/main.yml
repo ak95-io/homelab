@@ -1,0 +1,51 @@
+---
+# https://bafybeia3pza3d2i5yfsj3u7xhbqv7uiumw7ybxafe2pqknpnyed5zcsrou.ipfs.cf-ipfs.com/#_protonvpn_and_vpn_features
+# https://github.com/Rafficer/linux-cli-community/blob/master/USAGE.md
+
+- name: "Install protonvpn-cli deps"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.package:
+    name:
+      - openvpn
+      - dialog
+      - python3-pip
+      - python3-setuptools
+    state: present
+    update_cache: true
+
+- name: "Install protonvpn-cli package"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.pip:
+    name:
+      - protonvpn-cli
+    state: present
+
+- name: "Create protonvpn service"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.blockinfile:
+    path: /etc/systemd/system/protonvpn-autoconnect.service
+    block: |
+      [Unit]
+      Description=ProtonVPN-CLI auto-connect
+      Wants=network-online.target
+
+      [Service]
+      Type=forking
+      ExecStart=/usr/local/bin/protonvpn connect --p2p
+      Environment=PVPN_WAIT=60
+      Environment=PVPN_DEBUG=1
+      Environment=SUDO_USER=aam
+
+      [Install]
+      WantedBy=multi-user.target
+    state: present
+    create: true
+    mode: "0644"
+
+- name: "Enable protonvpn service"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.systemd:
+    name: protonvpn
+    enabled: true
+    daemon_reload: true
+    state: started

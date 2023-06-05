@@ -1,0 +1,10 @@
+---
+- name: All in one playbook
+  hosts: "{{ target | default('dd7.dc0.ak95.io') }}"
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: general/grub, grub_line: "quiet pcie_aspm=off pci=nommconf intel_iommu=on", __become: false } # noqa: role-name[path]
+    - { role: general/ssh_config, __become: false } # noqa: role-name[path]
+    - { role: proxmox/kernel_tune, __become: false } # noqa: role-name[path]
+    - { role: general/unattended_upgrades, __become: false } # noqa: role-name[path]

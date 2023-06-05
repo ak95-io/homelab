@@ -1,0 +1,14 @@
+---
+- name: Prerequisites
+  ansible.builtin.include_tasks: prereq.yml
+
+- name: Download
+  ansible.builtin.include_tasks: download.yml
+
+- name: Setup master
+  ansible.builtin.include_tasks: master.yml
+  when: k3s_role == "master"
+
+- name: Setup node
+  ansible.builtin.include_tasks: node.yml
+  when: k3s_role == "node"

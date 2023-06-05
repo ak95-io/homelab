@@ -1,0 +1,14 @@
+---
+- name: Setup autoinstall-generator
+  hosts: localhost
+  vars_files:
+    - vars/main.yml
+  vars_prompt:
+    - name: cloud_initPassword
+      prompt: "password to be placed in auto-init"
+      private: true
+      encrypt: sha512_crypt
+      confirm: true
+      salt_size: 7
+  roles:
+    - { role: autoinstall_generator }

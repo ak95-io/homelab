@@ -1,0 +1,7 @@
+---
+- name: Clone yt-toolbox/yt-toolbox-bash-parallel
+  ansible.builtin.git:
+    repo: git@github.com:yt-toolbox/yt-toolbox-bash-parallel.git
+    dest: /opt/yt-functions
+    version: master
+    accept_hostkey: true

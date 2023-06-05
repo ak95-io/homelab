@@ -1,0 +1,22 @@
+---
+- name: Create directory
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.file:
+    path: /opt/monitoring/
+    state: directory
+    recurse: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Template prerequirements.yml
+  ansible.builtin.copy:
+    src: prerequirements.yml
+    dest: /opt/monitoring/prerequirements.yml
+
+- name: Deploy prerequirements.yml
+  become: true
+  shell: |
+    kubectl apply -f ./prerequirements.yml
+  args:
+    chdir: /opt/monitoring/

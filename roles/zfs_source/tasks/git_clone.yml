@@ -1,0 +1,18 @@
+---
+- name: Change chown for /opt
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.file:
+    path: /opt
+    mode: '0777'
+
+- name: Get latest openzfs/zfs tag
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/openzfs/zfs/releases/latest
+    return_content: true
+  register: json_reponse
+
+- name: Clone openzfs/zfs
+  ansible.builtin.git:
+    repo: https://github.com/openzfs/zfs.git
+    dest: /opt/zfs
+    version: "{{ json_reponse.json.tag_name }}"

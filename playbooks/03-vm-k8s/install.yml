@@ -1,0 +1,26 @@
+---
+- name: General install
+  hosts: "{{ target | default('k3s_master:k3s_node') }}"
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: sudoers }
+    - { role: general/ssh_config } # noqa: role-name[path]
+    - { role: apps }
+    - { role: sshfs_mount }
+    - { role: general/unattended_upgrades } # noqa: role-name[path]
+    - { role: proxmox/qemu_agent } # noqa: role-name[path]
+
+- name: Install master
+  hosts: "{{ target | default('k3s_master') }}"
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: k3s/install } # noqa: role-name[path]
+
+- name: Install nodes
+  hosts: "{{ target | default('k3s_node') }}"
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: k3s/install } # noqa: role-name[path]

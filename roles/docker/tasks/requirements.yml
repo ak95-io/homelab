@@ -1,0 +1,42 @@
+---
+- name: Ensure old versions of Docker are not installed
+  ansible.builtin.package:
+    name:
+      - docker
+      - docker-engine
+      - docker.io
+      - containerd
+      - runc
+    state: absent
+
+- name: Ensure dependencies are installed
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.package:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      - software-properties-common
+    state: present
+    update_cache: true
+
+
+- name: Add Dockers official GPG key
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.get_url:
+    url: "{{ docker_key_source }}"
+    dest: "{{ docker_key_dest }}"
+    mode: '0644'
+    force: true
+
+- name: Add Dockers official repository
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.apt_repository:
+    repo: "deb [arch={{ docker_apt_arch }} signed-by={{ docker_key_dest }}] \
+      https://download.docker.com/linux/{{ ansible_distribution | lower }} \
+      {{ ansible_distribution_release }} {{ docker_apt_release_channel }}"
+    state: present
+    validate_certs: "{{ docker_apt_ignore_key_error }}"
+    update_cache: true

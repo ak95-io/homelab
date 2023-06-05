@@ -1,0 +1,7 @@
+---
+- name: Install prometheus
+  hosts: "{{ target | default('k3s_master') }}"
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: k3s/prometheus } # noqa: role-name[path]

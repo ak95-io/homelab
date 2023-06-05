@@ -1,0 +1,8 @@
+---
+- name: Enable IPv4 forwarding
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.sysctl: # noqa: fqcn[canonical]
+    name: net.ipv4.ip_forward
+    value: "1"
+    state: present
+    reload: true

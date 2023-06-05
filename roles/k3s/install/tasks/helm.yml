@@ -1,0 +1,19 @@
+---
+- name: Add helm gpg key for apt
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.shell: |
+    set -o pipe
+    curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | \
+      sudo tee /etc/apt/sources.list.d/helm.list
+  args:
+    creates: /etc/apt/sources.list.d/helm.list
+
+- name: Install software
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.package: # noqa: fqcn[action-core]
+    name: "{{ item }}"
+    update_cache: true
+    state: present
+  loop:
+    - helm
