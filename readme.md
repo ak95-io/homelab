@@ -1,4 +1,4 @@
-# Setting up Ubuntu Server on DD7 Proxmox
+# Setting up Ubuntu Server on FDD7 Proxmox
 
 _Disclaimer: do this at your own risk. No fancy web GUI here (except monitoring), just raw Unix power._
 

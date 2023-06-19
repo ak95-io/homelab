@@ -164,7 +164,10 @@ find . -type f -exec chmod 664 {} \;
 rename 'y/A-Z/a-z/' ./* && \
 rename 'y/\ /./' ./* && \
 rename 's/(\-|\+)/\./g' ./* && \
-rename 's/(\(|\)|\{|\}|\[|\])//g' ./*
+rename 's/(\(|\)|\{|\}|\[|\])//g' ./* && \
+rename 's/(\.)+/\./g' ./*
+
+rename 's/^/007\./' *.mkv
 ```
 
 ```shell
@@ -220,5 +223,11 @@ docker run -d --restart=always \
 
 # deluge_exporter
 ```shell
-docker run -d --restart unless-stopped -e "DELUGE_HOST=172.17.0.1" -v /home/aam/.config/deluge/:/root/.config/deluge/ -p 9354:9354 --name deluge_exporter tobbez/deluge_exporter:latest
+docker run -d \
+  --restart unless-stopped \
+  -e "DELUGE_HOST=172.17.0.1" \
+  -v /home/aam/.config/deluge/:/root/.config/deluge/ \
+  -p 9354:9354 \
+  --name deluge_exporter \
+  tobbez/deluge_exporter:latest
 ```

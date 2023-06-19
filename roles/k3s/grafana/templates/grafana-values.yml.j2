@@ -3,7 +3,9 @@ grafana.ini:
     domain: "grafana.dc0.ak95.io"
 
 image:
-  tag: "latest"
+  repository: grafana/grafana
+  tag: latest
+  pullPolicy: Always
 
 service:
   portName: grafana

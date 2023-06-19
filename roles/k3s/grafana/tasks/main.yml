@@ -4,10 +4,13 @@
     src: grafana-values.yml.j2
     dest: /opt/monitoring/grafana-values.yml
 
-- name: Install grafana
+- name: Install grafana repo
   ansible.builtin.shell: |
     helm repo add grafana https://grafana.github.io/helm-charts
     helm repo update
+
+- name: Install grafana
+  ansible.builtin.shell: |
     helm upgrade --install grafana grafana/grafana \
       --namespace monitoring-system \
       --create-namespace \

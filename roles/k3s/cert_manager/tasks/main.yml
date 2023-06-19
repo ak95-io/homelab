@@ -13,10 +13,13 @@
   args:
     creates: /usr/local/bin/cmctl
 
-- name: Install cert-manager.io
+- name: Install cert-manager.io repo
   ansible.builtin.shell: |
     helm repo add jetstack https://charts.jetstack.io
     helm repo update
+
+- name: Install cert-manager.io
+  ansible.builtin.shell: |
     helm upgrade --install cert-manager jetstack/cert-manager \
       --namespace cert-manager \
       --create-namespace \

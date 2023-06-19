@@ -1,3 +1,4 @@
 .vscode
 **/ansible-retry
 **/tmp_dir
+**/.DS_Store

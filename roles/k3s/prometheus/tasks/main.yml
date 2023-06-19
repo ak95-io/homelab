@@ -11,7 +11,7 @@
 
 - name: Install prometheus
   ansible.builtin.shell: |
-    helm install --replace prometheus prometheus-community/prometheus \
+    helm upgrade --install prometheus prometheus-community/prometheus \
       --namespace monitoring-system \
       --create-namespace \
       --values prometheus-values.yml
