@@ -1,0 +1,7 @@
+---
+- name: Users playbook
+  hosts: "{{ target | default('managable') }}"
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: users }

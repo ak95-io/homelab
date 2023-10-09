@@ -3,7 +3,7 @@
 # export PS4='+ $0:$LINENO '
 # set -x
 
-NOW_DATE="$(date +%s)"
+NOW_DATE="$(date +%Y.%m.%dT%H:%M:%S%z)"
 
 function pad-line() {
   # $1 - content

@@ -21,6 +21,7 @@ from typing import Optional
 from os.path import join as join_path
 from ansible.errors import AnsibleError
 from tempfile import gettempdir
+from ansible.cli.vault import VaultCLI
 
 VAULT_REGEX = re.compile(r'(?P<prefix>!vault\s+[|>]-?\s*\n)?(?P<vault>^(?P<indent>\s*)\$ANSIBLE_VAULT\S*\n(?:\s*\w+\n)*)', re.MULTILINE)
 
@@ -68,10 +69,21 @@ def rekey(file_name: str, content: str, new_id: str) -> str:
             if not os.path.isfile(temp_name):
                 raise Exception("temp file does not exists")
 
+            # Raw commands are used instead of ansible-vault python API due to the errors that occurs on the second runs of API.
             if new_id == "decrypt":
+                # use ansible.cli.vault
+                # cli = VaultCLI(args=['ansible-vault', 'decrypt', temp_name])
+                # cli.parse()
+                # cli.run()
+
                 os.system(f"ansible-vault decrypt -vvvvv {temp_name}")
                 print()
             else:
+                # use ansible.cli.vault
+                # cli = VaultCLI(args=['ansible-vault', 'rekey', '--encrypt-vault-id', new_id, temp_name])
+                # cli.parse()
+                # cli.run()
+
                 os.system(f"ansible-vault rekey -vvvvv --encrypt-vault-id {new_id} {temp_name}")
                 print()
 
