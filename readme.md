@@ -18,16 +18,16 @@ _Disclaimer: do this at your own risk. No fancy web GUI here (except monitoring)
 * [Ansible](#ansible)
 * [Extras](#extras)
 
+## Articles
+
+* https://www.nearshore-it.eu/articles/technologies/getting-started-with-homelab/
+
 ## Overview
 
 _One server to rule them all._<br>
 _One server to find them._<br>
 _One server to bring them all_<br>
 _and in the darkness store them._
-
-## Articles
-
-* https://www.nearshore-it.eu/articles/technologies/getting-started-with-homelab/
 
 ### NAS Spec
 
