@@ -8,15 +8,15 @@ _Disclaimer: do this at your own risk. No fancy web GUI here (except monitoring)
 
 ## Table of Contents
 
-* [Setting up HomeLab with help of Ubuntu and Ansible](#setting-up-homelab-with-help-of-ubuntu-and-ansible)
-  * [Table of Contents](#table-of-contents)
-  * [Etymology](#etymology)
-  * [NAS Spec](#nas-spec)
-  * [Original projects](#original-projects)
-  * [Cloud-install config generation](#cloud-install-config-generation)
-  * [Get ISO](#get-iso)
-  * [Ansible part (optional)](#ansible-part-optional)
-  * [Extras](#extras)
+* [Overview](#overview)
+* [NAS Spec](#nas-spec)
+* [Original projects](#original-projects)
+* [Cloud-install automation](#cloud-install-automation)
+  * [`autoinstall-generator.yml`](#autoinstall-generatoryml)
+  * [`tools/prepare.sh`](#toolspreparesh)
+  * [Ventoy](#ventoy)
+* [Ansible](#ansible)
+* [Extras](#extras)
 
 ## Overview
 
