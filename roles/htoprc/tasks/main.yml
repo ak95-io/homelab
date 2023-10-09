@@ -1,0 +1,18 @@
+---
+# Make sure ~/.config/htop exists
+- name: "Make sure ~/.config/htop exists"
+  ansible.builtin.file:
+    state: directory
+    mode: '0755'
+    path: ~/.config/htop
+
+# Install htoprc
+- name: "Install htoprc"
+  ansible.builtin.copy:
+    src: htoprc
+    dest: ~/.config/htop/htoprc
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0644
+  register: install_htoprc
+  changed_when: install_htoprc.changed

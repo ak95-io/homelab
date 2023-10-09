@@ -1,0 +1,408 @@
+#!/usr/bin/env zsh
+
+#    ███████╗███████╗██╗  ██╗██████╗  ██████╗
+#    ╚══███╔╝██╔════╝██║  ██║██╔══██╗██╔════╝
+#      ███╔╝ ███████╗███████║██████╔╝██║
+#     ███╔╝  ╚════██║██╔══██║██╔══██╗██║
+# ██╗███████╗███████║██║  ██║██║  ██║╚██████╗
+# ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝
+# # https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=ANSI%20Shadow&text=.zshrc
+
+#If not running interactively, don"t do anything
+[[ $- != *i* ]] && return
+
+#source /etc/environment
+export ZNAP=$HOME/.znap
+export ZSH_CONF=$HOME/.zshrc
+export ZSH=$ZNAP/ohmyzsh/ohmyzsh
+
+export HISTFILE=${HOME}/.zsh_history
+export PS4='+ $0:$LINENO '
+
+[[ -f ${HOME}/.homelab.zsh ]] && source ${HOME}/.homelab.zsh
+
+# Save aliases for later restoration
+save_aliases=$(alias -L)
+
+# Bundles
+plugins=(
+  # Bundle
+  aliases
+  ansible
+  # aws
+  command-not-found
+  common-aliases
+  composer
+  docker
+  docker-compose
+  encode64
+  extract
+  git
+  git-extras
+  gnu-utils
+  gpg-agent
+  httpie
+  kubectl
+  jsontools
+  nmap
+  pip
+  pyenv
+  pylint
+  python
+  ssh-agent
+  sudo
+  vscode
+)
+
+# ZSH TMUX
+# ZSH_TMUX_AUTOSTART=true
+# ZSH_TMUX_AUTOQUIT=false
+
+# Turns off asterix notation
+setopt NO_NOMATCH
+
+### HISTORY
+
+HISTSIZE=10000000
+SAVEHIST=10000000
+setopt BANG_HIST                 # Treat the '!' character specially during expansion.
+setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
+setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
+setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+setopt NO_HIST_SAVE_BY_COPY	     # zsh writes a temporary file then moves it in place when complete. In this case, if the history file was a symbolic link, the new file replaces the symbolic link.
+
+### END HISTORY
+
+setopt AUTO_CD
+setopt AUTO_PUSHD
+setopt CHASE_DOTS
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_SILENT
+setopt PUSHD_TO_HOME
+
+# Theme config
+# ZSH_THEME="spaceship"
+
+SPACESHIP_PROMPT_ADD_NEWLINE="true"
+SPACESHIP_PROMPT_SEPARATE_LINE="true"
+SPACESHIP_PROMPT_FIRST_PREFIX_SHOW="true"
+SPACESHIP_PROMPT_PREFIXES_SHOW="true"
+SPACESHIP_PROMPT_SUFFIXES_SHOW="true"
+SPACESHIP_PROMPT_DEFAULT_PREFIX="via "
+SPACESHIP_PROMPT_DEFAULT_SUFFIX=" "
+
+SPACESHIP_CHAR_PREFIX=""
+SPACESHIP_CHAR_SUFFIX=""
+SPACESHIP_CHAR_SYMBOL="> "
+SPACESHIP_CHAR_SYMBOL_ROOT="# "
+SPACESHIP_CHAR_SYMBOL_SECONDARY=">> "
+SPACESHIP_CHAR_COLOR_SUCCESS="green"
+SPACESHIP_CHAR_COLOR_FAILURE="red"
+SPACESHIP_CHAR_COLOR_SECONDARY="yellow"
+
+SPACESHIP_TIME_SHOW="false"
+SPACESHIP_TIME_PREFIX="at "
+SPACESHIP_TIME_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_TIME_COLOR="yellow"
+SPACESHIP_TIME_FORMAT="false"
+SPACESHIP_TIME_12HR="false"
+
+SPACESHIP_USER_SHOW="true"
+SPACESHIP_USER_PREFIX="as "
+SPACESHIP_USER_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_USER_COLOR="yellow"
+SPACESHIP_USER_COLOR_ROOT="red"
+
+SPACESHIP_HOST_SHOW="true"
+SPACESHIP_HOST_SHOW_FULL="true"
+SPACESHIP_HOST_PREFIX=""
+SPACESHIP_HOST_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_HOST_COLOR="blue"
+SPACESHIP_HOST_COLOR_SSH="magenta"
+
+SPACESHIP_DIR_SHOW="true"
+SPACESHIP_DIR_PREFIX="in "
+SPACESHIP_DIR_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_DIR_TRUNC="3"
+SPACESHIP_DIR_TRUNC_PREFIX=".../"
+SPACESHIP_DIR_TRUNC_REPO="false"
+SPACESHIP_DIR_COLOR="cyan"
+SPACESHIP_DIR_LOCK_SYMBOL=' (no access)'
+SPACESHIP_DIR_LOCK_COLOR="red"
+
+SPACESHIP_GIT_SHOW="true"
+SPACESHIP_GIT_PREFIX="on "
+SPACESHIP_GIT_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_GIT_SYMBOL=""
+
+SPACESHIP_GIT_BRANCH_SHOW="true"
+SPACESHIP_GIT_BRANCH_PREFIX="$SPACESHIP_GIT_SYMBOL"
+SPACESHIP_GIT_BRANCH_SUFFIX=""
+SPACESHIP_GIT_BRANCH_COLOR="magenta"
+
+SPACESHIP_GIT_STATUS_SHOW="true"
+SPACESHIP_GIT_STATUS_PREFIX=" ["
+SPACESHIP_GIT_STATUS_SUFFIX="]"
+SPACESHIP_GIT_STATUS_COLOR="red"
+SPACESHIP_GIT_STATUS_UNTRACKED="?"
+SPACESHIP_GIT_STATUS_ADDED="+"
+SPACESHIP_GIT_STATUS_MODIFIED="!"
+SPACESHIP_GIT_STATUS_RENAMED="»"
+SPACESHIP_GIT_STATUS_DELETED="✘"
+SPACESHIP_GIT_STATUS_STASHED="$"
+SPACESHIP_GIT_STATUS_UNMERGED="="
+SPACESHIP_GIT_STATUS_AHEAD="⇡"
+SPACESHIP_GIT_STATUS_BEHIND="⇣"
+SPACESHIP_GIT_STATUS_DIVERGED="⇕"
+
+SPACESHIP_GOLANG_SHOW="true"
+SPACESHIP_GOLANG_PREFIX="go:("
+SPACESHIP_GOLANG_SUFFIX=")$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_GOLANG_SYMBOL="go "
+SPACESHIP_GOLANG_COLOR="cyan"
+
+SPACESHIP_DOCKER_SHOW="true"
+SPACESHIP_DOCKER_PREFIX="docker:("
+SPACESHIP_DOCKER_SUFFIX=")$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_DOCKER_SYMBOL="docker "
+SPACESHIP_DOCKER_COLOR="cyan"
+SPACESHIP_DOCKER_VERBOSE="false"
+
+SPACESHIP_DOCKER_CONTEXT_SHOW="true"
+SPACESHIP_DOCKER_CONTEXT_PREFIX="context:("
+SPACESHIP_DOCKER_CONTEXT_SUFFIX=")$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+
+SPACESHIP_AWS_SHOW="true"
+SPACESHIP_AWS_PREFIX="aws:("
+SPACESHIP_AWS_SUFFIX=")$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_AWS_SYMBOL="AWS "
+SPACESHIP_AWS_COLOR=208
+
+SPACESHIP_VENV_SHOW="true"
+SPACESHIP_VENV_PREFIX="venv:("
+SPACESHIP_VENV_SUFFIX=")$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_VENV_SYMBOL=" "
+SPACESHIP_VENV_GENERIC_NAMES="(virtualenv venv .venv)"
+SPACESHIP_VENV_COLOR="blue"
+
+SPACESHIP_PYTHON_SHOW="true"
+SPACESHIP_PYTHON_PREFIX="python:("
+SPACESHIP_PYTHON_SUFFIX=")$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_PYTHON_SYMBOL="python "
+SPACESHIP_PYTHON_COLOR="yellow"
+
+SPACESHIP_DOTNET_SHOW="true"
+SPACESHIP_DOTNET_PREFIX="dotnet("
+SPACESHIP_DOTNET_SUFFIX=")$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_DOTNET_SYMBOL=".NET "
+SPACESHIP_DOTNET_COLOR="128"
+
+SPACESHIP_KUBECTL_SHOW="false"
+SPACESHIP_KUBECTL_PREFIX="kube:("
+SPACESHIP_KUBECTL_SUFFIX=")$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_KUBECTL_COLOR="white"
+SPACESHIP_KUBECTL_SYMBOL="K8S "
+
+SPACESHIP_KUBECTL_VERSION_SHOW="false"
+SPACESHIP_KUBECTL_VERSION_PREFIX="kubectl:("
+SPACESHIP_KUBECTL_VERSION_SUFFIX=")$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_KUBECTL_VERSION_COLOR="cyan"
+
+SPACESHIP_KUBECTL_CONTEXT_SHOW="false"
+SPACESHIP_KUBECTL_CONTEXT_PREFIX="kubectx:("
+SPACESHIP_KUBECTL_CONTEXT_SUFFIX=")$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_KUBECTL_CONTEXT_COLOR="yellow"
+SPACESHIP_KUBECTL_CONTEXT_NAMESPACE_SHOW="true"
+SPACESHIP_KUBECTL_CONTEXT_COLOR_GROUPS=(
+  # red if namespace is "kube-system"
+  red    '\(kube-system)$'
+  # else, green if "dev-01" is anywhere in the context or namespace
+  green  dev-01
+  green  default
+  # else, red if context name ends with ".k8s.local" _and_ namespace is "system"
+  red    '\.k8s\.local \(system)$'
+  # else, yellow if the entire content is "test-" followed by digits, and no namespace is displayed
+  yellow '^test-[0-9]+$'
+)
+
+SPACESHIP_TERRAFORM_SHOW="true"
+SPACESHIP_TERRAFORM_PREFIX="$SPACESHIP_PROMPT_DEFAULT_PREFIX"
+SPACESHIP_TERRAFORM_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_TERRAFORM_SYMBOL="TF "
+SPACESHIP_TERRAFORM_COLOR="105"
+
+SPACESHIP_EXEC_TIME_SHOW="true"
+SPACESHIP_EXEC_TIME_PREFIX="took "
+SPACESHIP_EXEC_TIME_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_EXEC_TIME_COLOR="yellow"
+SPACESHIP_EXEC_TIME_ELAPSED="2"
+
+SPACESHIP_JOBS_SHOW="true"
+SPACESHIP_JOBS_PREFIX=""
+SPACESHIP_JOBS_SUFFIX=""
+SPACESHIP_JOBS_SYMBOL="✦"
+SPACESHIP_JOBS_COLOR="blue"
+SPACESHIP_JOBS_AMOUNT_PREFIX=""
+SPACESHIP_JOBS_AMOUNT_SUFFIX=""
+SPACESHIP_JOBS_AMOUNT_THRESHOLD="1"
+
+SPACESHIP_EXIT_CODE_SHOW="true"
+SPACESHIP_EXIT_CODE_PREFIX=""
+SPACESHIP_EXIT_CODE_SUFFIX=" "
+SPACESHIP_EXIT_CODE_SYMBOL=""
+SPACESHIP_EXIT_CODE_COLOR="magenta"
+
+SPACESHIP_BATTERY_SHOW="false"
+
+SPACESHIP_PROMPT_ORDER=(
+  time          # Time stamps section
+  host          # Hostname section
+  user          # Username section
+  dir           # Current directory section
+  git           # Git section (git_branch + git_status)
+  # package       # Package version
+  # xcode         # Xcode section
+  # golang        # Go section
+  # docker        # Docker section
+  # aws           # Amazon Web Services section
+  # venv          # virtualenv section
+  # dotnet        # .NET section
+  # kubectl       # Kubectl context section
+  # terraform     # Terraform workspace section
+  exec_time     # Execution time
+  line_sep      # Line break
+  jobs          # Background jobs indicator
+  exit_code     # Exit code section
+  char          # Prompt character
+  # pyenv         # Pyenv section
+)
+
+# ETC
+CASE_SENSITIVE="false"
+HYPHEN_INSENSITIVE="true"
+DISABLE_AUTO_UPDATE="false"
+DISABLE_LS_COLORS="false"
+DISABLE_AUTO_TITLE="false"
+ENABLE_CORRECTION="false"
+COMPLETION_WAITING_DOTS="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+### ZNAP
+[[ -f ${ZNAP}/znap/znap.zsh ]] ||
+  git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git ${ZNAP}/znap/
+
+source ${ZNAP}/znap/znap.zsh  # Start Znap
+
+znap source marlonrichert/zsh-autocomplete
+znap source zsh-users/zsh-syntax-highlighting
+znap source zsh-users/zsh-autosuggestions
+znap source zsh-users/zsh-history-substring-search
+
+znap source spaceship-prompt/spaceship-prompt
+znap source ohmyzsh/ohmyzsh
+### END ZNAP
+
+source ${ZSH}/oh-my-zsh.sh
+
+# ZSH SYNTAX HIGHLIGHT
+# typeset -gA ZSH_HIGHLIGHT_STYLES
+# ZSH_HIGHLIGHT_STYLES[cursor]='bold'
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=blue"
+ZSH_HIGHLIGHT_STYLES[default]="none"
+ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=red,bold"
+ZSH_HIGHLIGHT_STYLES[reserved-word]="fg=yellow"
+ZSH_HIGHLIGHT_STYLES[alias]="fg=green"
+ZSH_HIGHLIGHT_STYLES[suffix-alias]="fg=green"
+ZSH_HIGHLIGHT_STYLES[command]="fg=green"
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=green"
+ZSH_HIGHLIGHT_STYLES[commandseparator]="none"
+ZSH_HIGHLIGHT_STYLES[path]="none"
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]=""
+ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]=""
+ZSH_HIGHLIGHT_STYLES[globbing]="fg=blue"
+ZSH_HIGHLIGHT_STYLES[history-expansion]="fg=blue"
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="none"
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]="none"
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]="none"
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]="fg=yellow"
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]="fg=yellow"
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]="fg=yellow"
+ZSH_HIGHLIGHT_STYLES[rc-quote]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[assign]="none"
+ZSH_HIGHLIGHT_STYLES[redirection]="none"
+ZSH_HIGHLIGHT_STYLES[comment]="fg=black,bold"
+ZSH_HIGHLIGHT_STYLES[arg0]="fg=green"
+
+ZSH_HIGHLIGHT_MAXLENGTH=512
+
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+ZSH_AUTOSUGGEST_STRATEGY="match_prev_cmd"
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(
+  brackets
+  cursor
+  line
+  main
+  pattern
+  regexp
+  root
+)
+
+autoload -U zmv
+
+### ZNAP OPTIONS
+
+# https://github.com/marlonrichert/zsh-autocomplete/blob/main/.zshrc
+zstyle ':autocomplete:*' min-input 2
+zstyle ':autocomplete:*' widget-style menu-select
+zstyle ':autocomplete:*' recent-dirs no
+zstyle ':autocomplete:*' delay 0.1
+zstyle ':autocomplete:*' add-space ''
+
+# Up arrow:
+bindkey '\[[A' up-line-or-history
+bindkey '\e[A' up-line-or-history
+bindkey '\eOA' up-line-or-history
+# up-line-or-search:  Open history menu.
+# up-line-or-history: Cycle to previous history line.
+
+# Down arrow:
+bindkey '\[[B' down-line-or-history
+bindkey '\e[B' down-line-or-history
+bindkey '\eOB' down-line-or-history
+# down-line-or-select:  Open completion menu.
+# down-line-or-history: Cycle to next history line.
+
+# Uncomment the following lines to disable live history search:
+# zle -A {.,}history-incremental-search-forward
+# zle -A {.,}history-incremental-search-backward
+
+# Map TAB to menu-select:
+bindkey '\t' menu-select
+bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
+# bindkey '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
+
+
+bindkey -M menuselect '\r' accept-line
+# .accept-line: Accept command line.
+# accept-line:  Accept selection and exit menu.
+
+### END ZNAP OPTIONS
+
+# Reset aliases
+eval $save_aliases; unset save_aliases
+

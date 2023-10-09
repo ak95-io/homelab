@@ -1,0 +1,13 @@
+---
+# Add sudoers to the users
+- name: Insert sudoers to the users
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.copy:
+    content: "{{ item.value.sudoers }}"
+    dest: "/etc/sudoers.d/{{ item.key }}"
+    mode: '0440'
+    owner: root
+    group: root
+  loop: "{{ users_to_setup | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"

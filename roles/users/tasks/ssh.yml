@@ -1,0 +1,57 @@
+---
+- name: "Set authorized_keys for users"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.posix.authorized_key:
+    user: "{{ item.0.key }}"
+    state: present
+    key: "{{ item.1 }}"
+  with_subelements:
+    - "{{ users_to_setup | dict2items }}"
+    - value.ssh.authorized_keys
+  loop_control:
+    label: "{{ item.0.key }}"
+
+- name: Add .ssh/config file
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.template:
+    src: ssh_config.j2
+    mode: '0644'
+    owner: "{{ item.key }}"
+    group: "{{ item.key }}"
+    dest: "/home/{{ item.key }}/.ssh/config"
+  loop: "{{ users_to_setup | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Add private keys to the users
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.copy:
+    content: "{{ item.1.private }}"
+    dest: "/home/{{ item.0.key }}/.ssh/{{ item.1.name }}.priv"
+    mode: '0600'
+    owner: "{{ item.0.key }}"
+    group: "{{ item.0.key }}"
+  with_subelements:
+    - "{{ users_to_setup | dict2items }}"
+    - value.ssh.keys
+    - skip_missing: True
+  loop_control:
+    label: "{{ item.0.key }}"
+  when: item.0.value.ssh.keys is defined
+
+- name: Add public keys to the users
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.copy:
+    content: "{{ item.1.public }}"
+    dest: "/home/{{ item.0.key }}/.ssh/{{ item.1.name }}.pub"
+    mode: '0644'
+    owner: "{{ item.0.key }}"
+    group: "{{ item.0.key }}"
+  with_subelements:
+    - "{{ users_to_setup | dict2items }}"
+    - value.ssh.keys
+    - skip_missing: True
+  loop_control:
+    label: "{{ item.0.key }}"
+  when: item.0.value.ssh.keys is defined
+

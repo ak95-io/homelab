@@ -11,9 +11,30 @@
 
 - name: Install grafana
   ansible.builtin.shell: |
-    helm upgrade --install grafana grafana/grafana \
-      --namespace monitoring-system \
-      --create-namespace \
-      --values grafana-values.yml
+    set -x
+
+    helm history --max 1 grafana
+    if [[ ${?} -ne 0 ]]; then
+      helm install grafana grafana/grafana \
+        --namespace monitoring-system \
+        --create-namespace \
+        --values grafana-values.yml \
+        --wait --replace
+
+    else
+      helm history --max 1 grafana 2>/dev/null | grep FAILED
+      if [[ ${?} -eq 0 ]]; then
+        helm delete --wait grafana
+      fi
+
+      helm upgrade grafana grafana/grafana \
+        --namespace monitoring-system \
+        --create-namespace \
+        --values grafana-values.yml \
+        --install --wait
+
+    fi
+
   args:
     chdir: /opt/monitoring/
+    executable: /bin/bash

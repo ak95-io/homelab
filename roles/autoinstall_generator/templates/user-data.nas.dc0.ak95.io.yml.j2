@@ -1,0 +1,150 @@
+#cloud-config
+autoinstall:
+  version: 1
+
+  locale: en_US.UTF-8
+
+  keyboard:
+    layout: pl
+
+  refresh-installer:
+    update: true
+
+  apt:
+    geoip: true
+    preserve_sources_list: false
+    fallback: offline-install
+
+  # READ THE FUCKING DOCS: https://curtin.readthedocs.io/en/latest/topics/networking.html
+  network:
+    version: 2
+    ethernets:
+      if0:
+        match:
+          name: eno*
+        optional: true
+      if1:
+        match:
+          name: enp*
+        optional: true
+    bonds:
+      # CHECK THE NAME
+      bond0:
+        interfaces: [if0, if1]
+        dhcp4: true
+        parameters:
+          mode: 802.3ad
+          lacp-rate: fast
+          mii-monitor-interval: 100
+
+  # READ THE FUCKING DOCS: https://curtin.readthedocs.io/en/latest/topics/storage.html
+  storage:
+    # New
+    version: 2
+    swap:
+      size: 0
+    config:
+      - type: disk                   # Always install OS on our smallest disk
+        id: os-drive
+        serial: Samsung_SSD_980_PRO_1TB_S5GXNG0NA04068J
+        ptable: gpt
+        wipe: superblock-recursive
+        preserve: false
+        name: ''
+        grub_device: false
+
+      - type: partition             # EFI partition /boot/efi
+        id: efi-partition
+        number: 1
+        device: os-drive
+        size: 256M
+        flag: boot
+        grub_device: true
+
+      - type: format                # EFI partition format rules
+        id: efi-format
+        volume: efi-partition
+        fstype: fat32
+        label: ESP
+
+      - path: /boot/efi             # EFI partition mount rules
+        id: mount-efi
+        device: efi-format
+        type: mount
+
+      - type: partition             # BOOT partition /boot
+        id: boot-partition
+        number: 2
+        device: os-drive
+        size: 1G
+        grub_device: false
+
+      - type: format                # BOOT partition format rules
+        id: boot-format
+        volume: boot-partition
+        fstype: ext4
+        label: BOOT
+
+      - path: /boot                 # BOOT partition mount rules
+        id: mount-boot
+        device: boot-format
+        type: mount
+
+      - type: partition             # LVM partition (PV)
+        id: lvm-partition
+        number: 3
+        device: os-drive
+        size: -1
+        grub_device: false
+
+      - name: system                # LVM VG (system)
+        id: lvm_volgroup-0
+        devices:
+          - lvm-partition
+        preserve: false
+        type: lvm_volgroup
+
+      - name: root                  # LVM LV (root)
+        id: lvm_partition-root
+        volgroup: lvm_volgroup-0
+        size: -1
+        wipe: superblock
+        preserve: false
+        type: lvm_partition
+
+      - fstype: ext4                # LVM LV root - format rules
+        id: format-root
+        volume: lvm_partition-root
+        preserve: false
+        type: format
+
+      - path: /                     # LVM LV root - mount rules
+        id: mount-root
+        device: format-root
+        type: mount
+
+  identity:
+    hostname: nas.dc0.ak95.io
+    username: aam
+    password: {{ cloud_initPassword | mandatory }}
+
+  ssh:
+    install-server: true
+    authorized-keys:
+      - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCPCeqDxLSZz/1BVTQu62dU+D+mowjZc3aNE1HGbnUo" # aamkye@github.com
+    allow-pw: true
+
+  timezone: Europe/Warsaw
+
+  updates: all
+
+  user-data:
+    disable_root: false
+
+  late-commands:
+    - echo 'aam ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/aam
+    - chmod 440 /target/etc/sudoers.d/aam
+    - #echo "changeme-"$(tr -dc a-z0-9 </dev/urandom | head -c 16 ; echo '') > /target/etc/hostname
+    - chmod -x /target/etc/update-motd.d/10-help-text # /target/etc/update-motd.d/50-motd-news
+
+  shutdown: reboot

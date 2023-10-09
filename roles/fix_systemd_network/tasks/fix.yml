@@ -1,0 +1,18 @@
+---
+# Fix /etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service
+- name: "Fix systemd network"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.replace:
+    path: /etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service
+    regexp: 'ExecStart=/lib/systemd/systemd-networkd-wait-online.*'
+    replace: "ExecStart=/lib/systemd/systemd-networkd-wait-online -i {{ if_name | default('bond0') }}:degraded-carrier --timeout 10"
+    backup: yes
+
+# Reboot
+- name: "Reboot"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.reboot:
+    reboot_timeout: 300
+    pre_reboot_delay: 5
+    post_reboot_delay: 5
+    connect_timeout: 5

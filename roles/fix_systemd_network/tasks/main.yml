@@ -1,0 +1,3 @@
+---
+- name: "fix systemd network"
+  ansible.builtin.include_tasks: fix.yml

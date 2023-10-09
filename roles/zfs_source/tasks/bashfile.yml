@@ -12,9 +12,31 @@
         sudo zfs unmount -f $1 && sudo zfs unload-key $1
       }
 
+      function zload-all() {
+        if [[ -n "$PASS" ]]; then
+          echo $PASS | sudo zfs mount -l tortoise
+          echo $PASS | sudo zfs mount -l elephant
+          echo $PASS | sudo zfs mount -l cheetah
+          sudo zfs mount -a
+          unset PASS
+          zfs get mounted
+        else
+          echo "PASS missing.."
+          exit 1
+        fi
+      }
+
+      alias dev-disk-by-id-with-link="ls -l /dev/disk/by-id/* | \
+        grep -E '(scsi-SATA|nvme-[^e]).*[A-Z0-9]{8}\W\->' | \
+        tr -s ' ' | \
+        cut -d ' ' -f 9,11 | \
+        sed -e 's,\.\.\/\.\.,/dev,g'"
+
       alias dev-disk-by-id="ls -l /dev/disk/by-id/* | \
-        grep -E '(scsi-SATA_WD|nvme-[^e]).*[A-Z0-9]{5}\W\->' | \
-        tr -s ' ' | cut -d ' ' -f 9,11 | sed -e 's,\.\.\/\.\.,/dev,g'"
+        grep -E '(scsi-SATA|nvme-[^e]).*[A-Z0-9]{8}\W\->' | \
+        tr -s ' ' | \
+        cut -d ' ' -f 9 | \
+        sed -e 's,\.\.\/\.\.,/dev,g'"
 
       function apt-key-fix() {
         for KEY in $( \

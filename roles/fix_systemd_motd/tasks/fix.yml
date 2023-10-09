@@ -1,0 +1,10 @@
+---
+# Fix /etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service
+- name: Ensure motd systemd units are disabled
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  loop:
+    - motd-news

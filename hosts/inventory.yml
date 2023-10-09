@@ -1,0 +1,139 @@
+---
+all:
+  hosts:
+    nas.dc0.ak95.io:
+      ansible_user: aam
+      users_to_setup:
+        aam:
+          skip_create: true
+          ssh:
+            authorized_keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCPCeqDxLSZz/1BVTQu62dU+D+mowjZc3aNE1HGbnUo aamkye@github.com
+          sudoers: |
+            aam ALL=(ALL) NOPASSWD:ALL
+        operations:
+          uid: 2000
+          gid: 2000
+          ssh:
+            authorized_keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCPCeqDxLSZz/1BVTQu62dU+D+mowjZc3aNE1HGbnUo aamkye@github.com
+            keys:
+              - name: ssh.ecdsa.operations
+                private: |
+                  -----BEGIN OPENSSH PRIVATE KEY-----
+                  b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+                  QyNTUxOQAAACCYzNqUujiiQC7KruxEuYe034zOWS5uqLwSINnPYnLaewAAAJjY2C0K2Ngt
+                  CgAAAAtzc2gtZWQyNTUxOQAAACCYzNqUujiiQC7KruxEuYe034zOWS5uqLwSINnPYnLaew
+                  AAAEBda9TEargDy78QzLp0DgknFO6g7p7g0DHcvf3FOMYWn5jM2pS6OKJALsqu7ES5h7Tf
+                  jM5ZLm6ovBIg2c9ictp7AAAAE2FhbUBuYXMuZGMwLmFrOTUuaW8BAg==
+                  -----END OPENSSH PRIVATE KEY-----
+                public: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJjM2pS6OKJALsqu7ES5h7TfjM5ZLm6ovBIg2c9ictp7 operations
+            config_addons:
+              - |
+                Host backup backup.dc0.ak95.io
+                  User operations
+                  IdentityFile ~/.ssh/ssh.ecdsa.operations.priv
+                  IdentitiesOnly yes
+          crontab: |
+            0 1 * * * /home/operations/.bin/syncoid.backup.sh
+            0 0 * * * /home/operations/.bin/partition.backup.sh
+          scripts:
+            - syncoid.backup.sh
+            - partition.backup.sh
+          sudoers: |
+            # Send snapshots to backup
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset system
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs list -o name\,origin -t filesystem\,volume -Hr system/vm/hass
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H syncoid\:sync system/vm/hass
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation system/vm/hass
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -nvP system/vm/hass@autosnap_*
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send system/vm/hass@autosnap_*
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t bookmark guid\,creation system/vm/hass
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -I system/vm/hass@autosnap* system/vm/hass@autosnap_*
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -nvP -I system/vm/hass@autosnap_* system/vm/hass@autosnap_*
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs list -o name\,origin -t filesystem\,volume -Hr *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H syncoid\:sync *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -nvP *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t bookmark guid\,creation *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -I *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -nvP -I *
+    backup.dc0.ak95.io:
+      ansible_user: aam
+      users_to_setup:
+        aam:
+          skip_create: true
+          ssh:
+            authorized_keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCPCeqDxLSZz/1BVTQu62dU+D+mowjZc3aNE1HGbnUo aamkye@github.com
+          sudoers: |
+            aam ALL=(ALL) NOPASSWD:ALL
+        operations:
+          uid: 2000
+          gid: 2000
+          ssh:
+            authorized_keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCPCeqDxLSZz/1BVTQu62dU+D+mowjZc3aNE1HGbnUo aamkye@github.com
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJjM2pS6OKJALsqu7ES5h7TfjM5ZLm6ovBIg2c9ictp7 operations
+            keys:
+            # DELETE ME
+              - name: ssh.ecdsa.test
+                private: |
+                  -----BEGIN OPENSSH PRIVATE KEY-----
+                  test
+                  -----END OPENSSH PRIVATE KEY-----
+                public: ssh-ed25519 test operations
+            config_addons:
+            # DELETE ME
+              - |
+                Host test.host
+                  User testuser
+                  IdentityFile ~/.ssh/ssh.ecdsa.testkey.priv
+                  IdentitiesOnly yes
+              - |
+                Host test2.host
+                  User testuser
+                  IdentityFile ~/.ssh/ssh.ecdsa.testkey.priv
+                  IdentitiesOnly yes
+          crontab: |
+            0 0 * * * /home/operations/.bin/partition.backup.sh
+          scripts:
+            - partition.backup.sh
+          sudoers: |
+            # Receive snapshots from nas
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset system
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H name system/backups-by-snapshot/syncoid/homeassistant
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -F system/backups-by-snapshot/syncoid
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -s -F system/backups-by-snapshot/syncoid/homeassistant
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H receive_resume_token system/backups-by-snapshot/syncoid
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation system/backups-by-snapshot/syncoid
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H -p used system/backups-by-snapshot/syncoid
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H receive_resume_token system/backups-by-snapshot/syncoid/homeassistant
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation system/backups-by-snapshot/syncoid/homeassistant
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 type\,guid\,creation system/backups-by-snapshot/syncoid/homeassistant
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H -p used system/backups-by-snapshot/syncoid/homeassistant
+            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs rollback -R system/backups-by-snapshot/syncoid/homeassistant@autosnap_*
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H name *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -F *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -s -F *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H receive_resume_token *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H -p used *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H receive_resume_token *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 type\,guid\,creation *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H -p used *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs rollback -R *
+
+    weather-station-00.dc0.ak95.io:
+      ansible_user: aam
+    weather-station-01.dc0.ak95.io:
+      ansible_user: aam
+
+managable:
+  hosts:
+    nas.dc0.ak95.io:
+    backup.dc0.ak95.io:

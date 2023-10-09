@@ -1,0 +1,36 @@
+---
+- name: jimsalterjrs/sanoid > git clean # noqa: command-instead-of-module
+  ansible.builtin.shell: |
+    git clean -fx
+  args:
+    executable: /bin/bash
+    chdir: /opt/sanoid/repo
+  register: git_clean
+  changed_when: git_clean.rc == 0
+
+- name: jimsalterjrs/sanoid > rm # noqa: command-instead-of-module
+  ansible.builtin.shell: |
+    rm -rf sanoid*
+  args:
+    executable: /bin/bash
+    chdir: /opt/sanoid
+  register: rm
+  changed_when: rm.rc == 0
+
+- name: jimsalterjrs/sanoid > ln # noqa: command-instead-of-module
+  ansible.builtin.shell: |
+    ln -s packages/debian .
+  args:
+    executable: /bin/bash
+    chdir: /opt/sanoid/repo
+  register: ln
+  changed_when: ln.rc == 0
+
+- name: jimsalterjrs/sanoid > dpkg-buildpackage # noqa: command-instead-of-module
+  ansible.builtin.shell: |
+    dpkg-buildpackage -uc -us
+  args:
+    executable: /bin/bash
+    chdir: /opt/sanoid/repo
+  register: dpkg
+  changed_when: dpkg.rc == 0

@@ -1,0 +1,6 @@
+---
+- name: "Install latest backblaze"
+  ansible.builtin.pip:
+    name:
+      - b2
+    executable: "~/.pyenv/shims/pip"

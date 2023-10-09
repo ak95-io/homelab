@@ -1,0 +1,28 @@
+---
+- name: "Create bin folder for users"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.file:
+    path: "/home/{{ item.key }}/.bin"
+    state: directory
+    mode: '0755'
+    owner: "{{ item.key }}"
+    group: "{{ item.key }}"
+  loop: "{{ users_to_setup | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.scripts is defined
+
+- name: "Create scripts to users"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.copy:
+    src: "scripts/{{ item.1 }}"
+    dest: "/home/{{ item.0.key }}/.bin/{{ item.1 }}"
+    mode: '0755'
+    owner: "{{ item.0.key }}"
+    group: "{{ item.0.key }}"
+  with_subelements:
+    - "{{ users_to_setup | dict2items }}"
+    - value.scripts
+    - skip_missing: True
+  loop_control:
+    label: "{{ item.0.key }}"

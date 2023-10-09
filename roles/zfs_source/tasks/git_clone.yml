@@ -9,10 +9,12 @@
   ansible.builtin.uri:
     url: https://api.github.com/repos/openzfs/zfs/releases/latest
     return_content: true
-  register: json_reponse
+  register: zfs_json_reponse
+  when:
+    - zfs_version is not defined
 
 - name: Clone openzfs/zfs
   ansible.builtin.git:
     repo: https://github.com/openzfs/zfs.git
     dest: /opt/zfs
-    version: "{{ json_reponse.json.tag_name }}"
+    version: "{{ zfs_version | default(zfs_json_reponse.json.tag_name) }}"

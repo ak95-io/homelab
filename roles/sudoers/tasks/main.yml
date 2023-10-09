@@ -1,3 +1,0 @@
----
-- name: "Apply sudoers"
-  ansible.builtin.include_tasks: sudoers.yml

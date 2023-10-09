@@ -1,0 +1,32 @@
+---
+- name: Copy main zsh
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.copy:
+    src: zshrc
+    dest: "/home/{{ item.key }}/.zshrc"
+    mode: '0644'
+    owner: "{{ item.key }}"
+    group: "{{ item.key }}"
+  loop: "{{ users_to_setup | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Copy homelab.zsh
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.copy:
+    src: homelab.zsh
+    dest: "/home/{{ item.key }}/.homelab.zsh"
+    mode: '0644'
+    owner: "{{ item.key }}"
+    group: "{{ item.key }}"
+  loop: "{{ users_to_setup | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Change shell via chsh for users to use ZSH
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.shell: |
+    usermod --shell /usr/bin/zsh {{ item.key }}
+  loop: "{{ users_to_setup | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"

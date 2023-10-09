@@ -1,0 +1,13 @@
+---
+- name: "Insert crontab content"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.copy:
+    content: "{{ item.value.crontab }}"
+    dest: "/var/spool/cron/crontabs/{{ item.key }}"
+    mode: '0600'
+    owner: "{{ item.key }}"
+    group: crontab
+  loop: "{{ users_to_setup | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.crontab is defined

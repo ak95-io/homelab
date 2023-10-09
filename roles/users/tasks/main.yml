@@ -1,0 +1,21 @@
+---
+- name: "Run prerequisite tasks"
+  ansible.builtin.include_tasks: "prereq.yml"
+
+- name: "Run generic tasks"
+  ansible.builtin.include_tasks: "generic.yml"
+
+- name: "Run ssh tasks"
+  ansible.builtin.include_tasks: "ssh.yml"
+
+- name: "Run sudoers tasks"
+  ansible.builtin.include_tasks: "sudoers.yml"
+
+- name: Run scripts tasks
+  ansible.builtin.include_tasks: "scripts.yml"
+
+- name: "Run crontab tasks"
+  ansible.builtin.include_tasks: "crontab.yml"
+
+- name: "Run zsh tasks"
+  ansible.builtin.include_tasks: "zsh.yml"

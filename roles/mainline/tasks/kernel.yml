@@ -7,7 +7,7 @@
         --install-latest \
       {% else %} \
         --install {{ mainline_kernel_version }} \
-      {% endif %} --yes
+      {% endif %}
   args:
     executable: /bin/bash
   register: install_mainline_kernel

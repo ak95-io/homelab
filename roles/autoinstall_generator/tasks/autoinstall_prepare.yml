@@ -7,6 +7,6 @@
 
 - name: "Prepare user-data"
   ansible.builtin.template:
-    src: user-data.yml.j2
+    src: user-data.{{ autoinstall_target | mandatory }}.yml.j2
     mode: '0644'
-    dest: "{{ tmp_dir }}/user-data"
+    dest: "{{ tmp_dir }}/user-data-{{ autoinstall_target }}"

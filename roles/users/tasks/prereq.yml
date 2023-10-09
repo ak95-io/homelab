@@ -1,0 +1,10 @@
+---
+# Install zsh
+- name: Ensure packages
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.package:
+    name:
+      - zsh
+      - git
+    state: latest # noqa: package-latest
+    update_cache: true

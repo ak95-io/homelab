@@ -3,14 +3,13 @@
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.package:
     name:
-      - tree
-      - httpie
-      - smartmontools
+      - debhelper
+      - libcapture-tiny-perl
+      - libconfig-inifiles-perl
+      - pv
+      - lzop
+      - mbuffer
+      - build-essential
       - git
-      - net-tools
-      - bash-completion
-      - exa
-      - apt-utils
-      - lm-sensors
     state: latest
     update_cache: true
