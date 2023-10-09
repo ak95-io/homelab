@@ -1,4 +1,4 @@
-# User and permissions
+# User and permissions helpers
 
 ```shell
 sudo chown aam:operations -R . && \

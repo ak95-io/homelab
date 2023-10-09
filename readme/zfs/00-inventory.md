@@ -1,4 +1,4 @@
-# Inventory
+# ZFS Inventory
 
 ## Cheetach - WD RED SN700
 

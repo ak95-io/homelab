@@ -1,4 +1,4 @@
-# Create and import
+# ZFS Create and import
 
 ```shell
 > sudo zpool destroy -f cheetah

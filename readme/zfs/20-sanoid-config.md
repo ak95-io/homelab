@@ -1,4 +1,4 @@
-# Sanoid config
+# ZFS Sanoid config
 
 ```shell
 [cheetah]
