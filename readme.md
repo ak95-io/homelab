@@ -81,7 +81,6 @@ Just run:
 
 ... and watch the ___magic___.
 
-<!-- TODO fixme-->
 ## Extras
 
 * [00-inventory.md](readme/zfs/00-inventory.md)
