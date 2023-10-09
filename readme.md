@@ -25,6 +25,10 @@ _One server to find them._<br>
 _One server to bring them all_<br>
 _and in the darkness store them._
 
+## Articles
+
+* https://www.nearshore-it.eu/articles/technologies/getting-started-with-homelab/
+
 ### NAS Spec
 
 * MoBo: Asus __X99-E WS__/USB 3.1
@@ -40,7 +44,7 @@ _and in the darkness store them._
   * NVME: 1 x M.2 2280 __Samsung 980 PRO 1TB__
   * NVME: 8 x 2280 __WD Red SN700 2TB__
   * HDD: 8x 3.5" __WD UltraStar HC550 16TB__
-  * HDD: 4x 3.5" __WD Red 4tb__
+  * HDD: 4x 3.5" __WD Red 4TB__
 
 ### Original projects
 
