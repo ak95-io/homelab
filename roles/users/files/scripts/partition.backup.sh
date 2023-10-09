@@ -12,7 +12,12 @@ function pad-line() {
   export padlength=80
   export pad_prefix="$(printf '%0.1s' "#"{1..3}) "
   export pad_suffix=" "
-  printf "%s%*.*s%s\n" "${pad_prefix}${1}${pad_suffix}" 0 $((padlength - ${#pad_prefix} - ${#1} - ${#pad_suffix} - 1)) "$pad"
+  export pad_special_sufix=" $(printf '%0.1s' "#"{1..3}) "
+  if [[ $((${#1} + 8)) -gt 80 ]]; then
+    printf "%s\n" "${pad_prefix}${1}${pad_special_sufix}"
+  else
+    printf "%s%*.*s%s\n" "${pad_prefix}${1}${pad_suffix}" 0 $((padlength - ${#pad_prefix} - ${#1} - ${#pad_suffix} - 1)) "$pad"
+  fi
 }
 
 function partition-backup() {

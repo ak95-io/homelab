@@ -26,7 +26,7 @@
 - name: Add private keys to the users
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.copy:
-    content: "{{ item.1.private }}"
+    content: "{{ item.1.private | replace('\\n', '\n') }}"
     dest: "/home/{{ item.0.key }}/.ssh/{{ item.1.name }}.priv"
     mode: '0600'
     owner: "{{ item.0.key }}"
@@ -42,7 +42,7 @@
 - name: Add public keys to the users
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.copy:
-    content: "{{ item.1.public }}"
+    content: "{{ item.1.public | replace('\\n', '\n') }}"
     dest: "/home/{{ item.0.key }}/.ssh/{{ item.1.name }}.pub"
     mode: '0644'
     owner: "{{ item.0.key }}"

@@ -21,36 +21,31 @@ all:
               - name: ssh.ecdsa.operations
                 private: !vault |
                   $ANSIBLE_VAULT;1.2;AES256;id-08-10-23
-                  35313433623566643339336434646432663734353833353862653239383134333164376564366461
-                  3936653363613462356333386534663234353333336165610a633337346163646230633861656662
-                  63623437333431393730383534323836646233373731376261313363313261636233393863316165
-                  6362373361663837360a316361323362613835363039376365393033363031366262663839653335
-                  62393866316466373039643837663235383565323166393835333734323565303136303961613632
-                  39653135353466366336396336383633626566666166396566646532393366356538623365616261
-                  32363139333731663461373964313932386362386530333165306165333563663437316663303665
-                  65386438333631323266386534343137336163306166343863666561393630366530313135313135
-                  31656166386461653630343433616633366664373561376236633733376238313661383066353166
-                  61373764633466653539613431623330383864656430353263363638653533666439333364323836
-                  34616462383636643934653666393532623931663930616232356230346139616139646136613732
-                  36316533373136626238393230626365373163623265333563376661336330323036323566346236
-                  35626231383762383663303739653761343537623463356435353638343132356461323265306537
-                  64356539623333303431373435336461363633303261326535333432663230363238353831366335
-                  36343164663339386331303434366164353962626435323634303561616332376133383563393934
-                  33376332333737383566326431363233323934613030636266313335306564376533633564316337
-                  31363738636562303862646636356335306566323230323736643833333066303665643935626236
-                  38633561343830636138363565333835646230336566343539373862663663623038643431353966
-                  35663035663738663737643039646462316334383761376332613735666231363466366461393563
-                  31393562336639613732336532366163663762316238663235323930393838623064663938303061
-                  66326166326332306132303730623265653239323635383936333133363132316339356238663932
-                  30306130373937643665363366343066303561346638373735353563323133316466333031646463
-                  31623731313761616130326332333833616632623732663461303537636263656333393733636266
-                  36623263616435346334393264383031396362383438373436623430653039366334653938373964
-                  66376632333534303435373132613237653830613232626561303730663635313936636139383766
-                  37373266366463376432383736313162363063316338346533363231316163613562616333343335
-                  63323230623266363535316366363663653139636134373030616630393933333364663261663833
-                  31303165383834366134343965623330366335623937336439396436326233643063623565373164
-                  39636135636166386430316536393962643132313232336565616464663566656438306134373563
-                  3238373434616362326466363661643734326361346435306161
+                  61343663646630623665383537343635653439383964386566636331313962336565326263386334
+                  3639616637353433323235333230633664323964373661330a313434626538343035346534306532
+                  66653932616534303531306237633138386164363836333061326166643230396331663665613638
+                  6662373964663065610a303565303834616638623435646564343730376533333538663336366437
+                  36353665396262313839623563613566386433336163663931346439303665623336666139613836
+                  66313434396631376562383763653464663530366535623333623164363031613661306130323236
+                  65323139393561373266663566613965323066613836633039306662373837653434343965333836
+                  32353737313366616236343165396665313935363865323130393564623037333463323234393062
+                  36653465623865633362303438616465396466333161323031313566356662373237326638363838
+                  30613235333466393366346161366334353236333733346635393033633862303932393031303562
+                  62353533663262323162313633663532613466623535376432626164656531613564653430366132
+                  39336130636333333533306237306364643038653636333434383662316239366637353439336337
+                  39633739623734656331646535383836643437356235613634346133616137313439316663343566
+                  36373330373864353837356133383662356236383736346233643935646661346232346237316330
+                  33663038363033313535623466343531386635306263353337393934383662323639303238333031
+                  36623932626534613366363434663266663634663334663266333465343338366530356631393832
+                  66643237396435386334303461613331343266616236363530626236633737373435356435343237
+                  33383035363439616236623935363934623233376564396531346564333930633564366434336639
+                  38343233643431626335653734343465656362333539636262623435313837303061356531356435
+                  62333531373562386232653462323037323731616638306138633861303461303661353864343263
+                  39343564323061376532353561316439623961613630303239373538333533353265306534656532
+                  63636334613035336264313434653039653630333434663134376636363761663731373664343933
+                  61353731363264373930326138616564633533613462386136613634393430343263393334616366
+                  30353730303065653536633438653864306661396566363363396531303232636138363365396663
+                  61346534623931343531653563383763636262656361373161393961646639636665
                 public: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJjM2pS6OKJALsqu7ES5h7TfjM5ZLm6ovBIg2c9ictp7 operations
             config_addons:
               - |
@@ -64,17 +59,17 @@ all:
           scripts:
             - syncoid.backup.sh
             - partition.backup.sh
+          # Send snapshots to backup
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset system
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs list -o name\,origin -t filesystem\,volume -Hr system/vm/hass
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H syncoid\:sync system/vm/hass
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation system/vm/hass
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -nvP system/vm/hass@autosnap_*
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send system/vm/hass@autosnap_*
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t bookmark guid\,creation system/vm/hass
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -I system/vm/hass@autosnap* system/vm/hass@autosnap_*
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -nvP -I system/vm/hass@autosnap_* system/vm/hass@autosnap_*
           sudoers: |
-            # Send snapshots to backup
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset system
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs list -o name\,origin -t filesystem\,volume -Hr system/vm/hass
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H syncoid\:sync system/vm/hass
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation system/vm/hass
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -nvP system/vm/hass@autosnap_*
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send system/vm/hass@autosnap_*
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t bookmark guid\,creation system/vm/hass
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -I system/vm/hass@autosnap* system/vm/hass@autosnap_*
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -nvP -I system/vm/hass@autosnap_* system/vm/hass@autosnap_*
             operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset *
             operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs list -o name\,origin -t filesystem\,volume -Hr *
             operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H syncoid\:sync *
@@ -105,20 +100,20 @@ all:
             0 0 * * * /home/operations/.bin/partition.backup.sh
           scripts:
             - partition.backup.sh
+          # Receive snapshots from nas
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset system
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H name system/backups-by-snapshot/syncoid/homeassistant
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -F system/backups-by-snapshot/syncoid
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -s -F system/backups-by-snapshot/syncoid/homeassistant
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H receive_resume_token system/backups-by-snapshot/syncoid
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation system/backups-by-snapshot/syncoid
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H -p used system/backups-by-snapshot/syncoid
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H receive_resume_token system/backups-by-snapshot/syncoid/homeassistant
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation system/backups-by-snapshot/syncoid/homeassistant
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 type\,guid\,creation system/backups-by-snapshot/syncoid/homeassistant
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H -p used system/backups-by-snapshot/syncoid/homeassistant
+          # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs rollback -R system/backups-by-snapshot/syncoid/homeassistant@autosnap_*
           sudoers: |
-            # Receive snapshots from nas
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset system
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H name system/backups-by-snapshot/syncoid/homeassistant
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -F system/backups-by-snapshot/syncoid
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -s -F system/backups-by-snapshot/syncoid/homeassistant
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H receive_resume_token system/backups-by-snapshot/syncoid
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation system/backups-by-snapshot/syncoid
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H -p used system/backups-by-snapshot/syncoid
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H receive_resume_token system/backups-by-snapshot/syncoid/homeassistant
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation system/backups-by-snapshot/syncoid/homeassistant
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 type\,guid\,creation system/backups-by-snapshot/syncoid/homeassistant
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H -p used system/backups-by-snapshot/syncoid/homeassistant
-            # operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs rollback -R system/backups-by-snapshot/syncoid/homeassistant@autosnap_*
             operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset *
             operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H name *
             operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -F *
