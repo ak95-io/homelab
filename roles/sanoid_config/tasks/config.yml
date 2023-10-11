@@ -1,0 +1,17 @@
+---
+- name: Template config file to the target
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.template:
+    src: sanoid.conf.j2
+    dest: /etc/sanoid/sanoid.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: sanoid_pools is defined
+
+- name: Restart sanoid service
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.service:
+    name: sanoid
+    state: restarted
+  when: sanoid_pools is defined

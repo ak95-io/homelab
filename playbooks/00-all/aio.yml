@@ -1,5 +1,5 @@
 ---
-- name: All in one playbook
+- name: "All in one playbook"
   hosts: "{{ target | default('managable') }}"
   vars_files:
     - vars/main.yml
@@ -19,3 +19,10 @@
     - { role: pyenv }
     - { role: yt_functions }
     - { role: backblaze_cli }
+
+- name: "NAS Playbook"
+  hosts: "{{ target | default('nas.dc0.ak95.io') }}"
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: sanoid_config, sanoid_pools: ["cheetah", "elephant"]}
