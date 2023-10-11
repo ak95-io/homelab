@@ -10,7 +10,7 @@
     - k3s
     - k3s-node
 
-- name: "Run pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc""
+- name: "Run pkill -9 -f \"k3s/data/[^/]+/bin/containerd-shim-runc\""
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.shell: |
     pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
