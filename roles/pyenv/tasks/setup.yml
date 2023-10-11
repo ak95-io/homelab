@@ -1,5 +1,5 @@
 ---
-- name: Ensure dependencies are installed
+- name: "Ensure dependencies are installed"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.package:
     name:
@@ -22,11 +22,11 @@
     state: latest # noqa: package-latest
     update_cache: true
 
-- name: Install pyenv
+- name: "Install pyenv"
   ansible.builtin.shell: |
     curl https://pyenv.run | bash
 
-- name: Place .bashrc config
+- name: "Place .bashrc config"
   ansible.builtin.blockinfile:
     path: ~/.bashrc
     marker: "# pyenv {mark} ANSIBLE MANAGED BLOCK"
@@ -37,7 +37,7 @@
         eval "$(pyenv init --path)"
       fi
 
-- name: Install python, enable pip
+- name: "Install python, enable pip"
   ansible.builtin.shell: |
     set -o pipefail
     export PYENV_ROOT="$HOME/.pyenv"

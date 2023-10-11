@@ -1,5 +1,5 @@
 ---
-- name: jimsalterjrs/sanoid > git clean # noqa: command-instead-of-module
+- name: "jimsalterjrs/sanoid > git clean # noqa: command-instead-of-module"
   ansible.builtin.shell: |
     git clean -fx
   args:
@@ -8,7 +8,7 @@
   register: git_clean
   changed_when: git_clean.rc == 0
 
-- name: jimsalterjrs/sanoid > rm # noqa: command-instead-of-module
+- name: "jimsalterjrs/sanoid > rm # noqa: command-instead-of-module"
   ansible.builtin.shell: |
     rm -rf sanoid*
   args:
@@ -17,7 +17,7 @@
   register: rm
   changed_when: rm.rc == 0
 
-- name: jimsalterjrs/sanoid > ln # noqa: command-instead-of-module
+- name: "jimsalterjrs/sanoid > ln # noqa: command-instead-of-module"
   ansible.builtin.shell: |
     ln -s packages/debian .
   args:
@@ -26,7 +26,7 @@
   register: ln
   changed_when: ln.rc == 0
 
-- name: jimsalterjrs/sanoid > dpkg-buildpackage # noqa: command-instead-of-module
+- name: "jimsalterjrs/sanoid > dpkg-buildpackage # noqa: command-instead-of-module"
   ansible.builtin.shell: |
     dpkg-buildpackage -uc -us
   args:

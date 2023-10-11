@@ -1,5 +1,5 @@
 ---
-- name: Disable services
+- name: "Disable services"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.systemd:
     name: "{{ item }}"
@@ -10,7 +10,7 @@
     - k3s
     - k3s-node
 
-- name: Run pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
+- name: "Run pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc""
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.shell: |
     pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
@@ -18,7 +18,7 @@
   changed_when: "pkill_containerd_shim_runc.rc == 0"
   failed_when: false
 
-- name: Umount k3s filesystems
+- name: "Umount k3s filesystems"
   ansible.builtin.include_tasks: __umount_with_children.yml
   with_items:
     - /run/k3s
@@ -28,7 +28,7 @@
   loop_control:
     loop_var: mounted_fs
 
-- name: Remove service files, binaries and data
+- name: "Remove service files, binaries and data"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.file:
     name: "{{ item }}"
@@ -41,7 +41,7 @@
     - /var/lib/kubelet
     - /var/lib/rancher/k3s
 
-- name: Reload daemon
+- name: "Reload daemon"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.systemd:
     daemon_reload: true

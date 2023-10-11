@@ -1,6 +1,6 @@
 ---
 
-- name: Copy K3s service file
+- name: "Copy K3s service file"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.template:
     src: "k3s.service.node.j2"
@@ -9,7 +9,7 @@
     group: root
     mode: "0755"
 
-- name: Enable and check K3s service
+- name: "Enable and check K3s service"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.systemd:
     name: k3s-node

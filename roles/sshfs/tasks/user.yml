@@ -1,5 +1,5 @@
 ---
-- name: Create user operations
+- name: "Create user operations"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.user:
     comment: Operations users for /mnt

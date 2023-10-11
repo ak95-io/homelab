@@ -1,5 +1,5 @@
 ---
-- name: Create group operations
+- name: "Create group operations"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.group:
     name: operations

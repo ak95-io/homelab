@@ -1,5 +1,5 @@
 ---
-- name: Install mainline kernel
+- name: "Install mainline kernel"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.shell: |
     sudo mainline \

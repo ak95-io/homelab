@@ -1,5 +1,5 @@
 ---
-- name: Add aliases to bashrc
+- name: "Add aliases to bashrc"
   ansible.builtin.blockinfile:
     path: ~/.bashrc
     marker: "# zfs {mark} ANSIBLE MANAGED BLOCK"

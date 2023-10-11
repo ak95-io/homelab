@@ -1,5 +1,5 @@
 ---
-- name: Change chown for /opt
+- name: "Change chown for /opt"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.file:
     path: /opt/sanoid
@@ -8,7 +8,7 @@
     group: aam
     state: directory
 
-- name: Get latest jimsalterjrs/sanoid tag
+- name: "Get latest jimsalterjrs/sanoid tag"
   ansible.builtin.uri:
     url: https://api.github.com/repos/jimsalterjrs/sanoid/releases/latest
     return_content: true
@@ -16,7 +16,7 @@
   when:
     - sanoid_version is not defined
 
-- name: Clone jimsalterjrs/sanoid
+- name: "Clone jimsalterjrs/sanoid"
   ansible.builtin.git:
     repo: https://github.com/jimsalterjrs/sanoid.git
     dest: /opt/sanoid/repo

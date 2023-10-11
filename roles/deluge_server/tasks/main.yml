@@ -107,7 +107,7 @@
     executable: /bin/bash
     creates: /opt/deluge-default-trackers/dist/
 
-- name: Copy plugin to deluge plugin folder
+- name: "Copy plugin to deluge plugin folder"
   ansible.builtin.shell: |
     /usr/bin/deluge-console plugin --install DefaultTrackers*.egg
   args:
@@ -115,14 +115,14 @@
     chdir: /opt/deluge-default-trackers/dist/
     creates: "{{ ansible_user_dir }}/.config/deluge/plugins/DefaultTrackers*.egg"
 
-# - name: Install default tracker list
+# - name: "Install default tracker list"
 #   become: "{{ __become | default(true) | bool }}"
 #   ansible.builtin.get_url:
 #     url: https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt
 #     dest: /etc/deluge/trackers.txt
 #     mode: 0644
 
-- name: Enable deluge plugins and set configs
+- name: "Enable deluge plugins and set configs"
   ansible.builtin.shell: |
     /usr/bin/deluge-console config -s allow_remote True || true
     /usr/bin/deluge-console plugin --enable Stats || true

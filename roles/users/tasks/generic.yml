@@ -1,5 +1,5 @@
 ---
-- name: Create groups
+- name: "Create groups"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.group:
     name: "{{ item.key }}"
@@ -10,7 +10,7 @@
     label: "{{ item.key }}"
   when: item.value.skip_create is not defined or item.value.skip_create is false
 
-- name: Create users
+- name: "Create users"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.user:
     comment: "{{ item.key }} users"

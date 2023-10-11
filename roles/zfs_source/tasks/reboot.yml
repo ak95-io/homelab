@@ -1,4 +1,4 @@
 ---
-- name: Unconditionally reboot the machine with all defaults
+- name: "Unconditionally reboot the machine with all defaults"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.reboot:

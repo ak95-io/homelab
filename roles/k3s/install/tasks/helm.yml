@@ -1,5 +1,5 @@
 ---
-- name: Add helm gpg key for apt
+- name: "Add helm gpg key for apt"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.shell: |
     set -o pipe
@@ -9,7 +9,7 @@
   args:
     creates: /etc/apt/sources.list.d/helm.list
 
-- name: Install software
+- name: "Install software"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.package: # noqa: fqcn[action-core]
     name: "{{ item }}"

@@ -1,10 +1,10 @@
 ---
-- name: Add mainline stable repository from PPA and install its signing key on Ubuntu target
+- name: "Add mainline stable repository from PPA and install its signing key on Ubuntu target"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.apt_repository:
     repo: ppa:cappelikan/ppa
 
-- name: Ensure packages are installed
+- name: "Ensure packages are installed"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.package:
     name:

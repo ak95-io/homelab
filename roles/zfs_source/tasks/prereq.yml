@@ -1,5 +1,5 @@
 ---
-- name: Ensure packages are installed # noqa: package-latest
+- name: "Ensure packages are installed # noqa: package-latest"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.package:
     name:
@@ -36,7 +36,7 @@
     state: latest
     update_cache: true
 
-- name: Add line into the depmod configuration file
+- name: "Add line into the depmod configuration file"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.lineinfile:
     dest: /etc/depmod.d/ubuntu.conf
@@ -44,7 +44,7 @@
     line: '\1 extra'
     backrefs: true
 
-- name: Hold all zfs-related upstream packages
+- name: "Hold all zfs-related upstream packages"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.shell: |
     apt-mark hold zfsutils-linux

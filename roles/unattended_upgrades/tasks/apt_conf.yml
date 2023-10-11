@@ -1,5 +1,5 @@
 ---
-- name: Configure unattended-upgrades
+- name: "Configure unattended-upgrades"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.template:
     src: 50unattended-upgrades.j2
@@ -8,7 +8,7 @@
     group: root
     mode: '0644'
 
-- name: Enable unattended-upgrades
+- name: "Enable unattended-upgrades"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.template:
     src: 20auto-upgrades.j2

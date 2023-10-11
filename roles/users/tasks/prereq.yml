@@ -1,6 +1,6 @@
 ---
 # Install zsh
-- name: Ensure packages
+- name: "Ensure packages"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.package:
     name:

@@ -1,5 +1,5 @@
 ---
-- name: Set authorized_keys for user operations
+- name: "Set authorized_keys for user operations"
   become: "{{ __become | default(true) | bool }}"
   ansible.posix.authorized_key:
     user: operations

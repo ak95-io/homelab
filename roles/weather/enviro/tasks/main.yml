@@ -1,5 +1,5 @@
 ---
-- name: Install enviro-python
+- name: "Install enviro-python"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.shell:
     apt update && \

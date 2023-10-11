@@ -1,15 +1,15 @@
 ---
-- name: Template prometheus.yml
+- name: "Template prometheus.yml"
   ansible.builtin.template:
     src: prometheus-values.yml.j2
     dest: /opt/monitoring/prometheus-values.yml
 
-- name: Install prometheus repo
+- name: "Install prometheus repo"
   ansible.builtin.shell: |
     helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
     helm repo update
 
-- name: Install prometheus
+- name: "Install prometheus"
   ansible.builtin.shell: |
     helm upgrade --install prometheus prometheus-community/prometheus \
       --namespace monitoring-system \

@@ -1,5 +1,5 @@
 ---
-- name: Install Docker
+- name: "Install Docker"
   retries: 2
   delay: 3
   register: result
@@ -10,23 +10,23 @@
     name: "{{ docker_package }}"
     state: "{{ docker_package_state }}"
 
-- name: Reload systemd
+- name: "Reload systemd"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.systemd:
     daemon_reload: true
 
-- name: Restart docker
+- name: "Restart docker"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.service:
     name: docker
     state: "{{ docker_restart_handler_state }}"
 
-- name: Ensure Docker is started and enabled at boot
+- name: "Ensure Docker is started and enabled at boot"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.service:
     name: docker
     state: "{{ docker_service_state }}"
     enabled: "{{ docker_service_enabled }}"
 
-- name: Ensure handlers are notified now to avoid firewall conflicts
+- name: "Ensure handlers are notified now to avoid firewall conflicts"
   ansible.builtin.meta: flush_handlers

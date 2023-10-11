@@ -1,5 +1,5 @@
 ---
-- name: Copy main zsh
+- name: "Copy main zsh"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.copy:
     src: zshrc
@@ -11,7 +11,7 @@
   loop_control:
     label: "{{ item.key }}"
 
-- name: Copy homelab.zsh
+- name: "Copy homelab.zsh"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.copy:
     src: homelab.zsh
@@ -23,7 +23,7 @@
   loop_control:
     label: "{{ item.key }}"
 
-- name: Change shell via chsh for users to use ZSH
+- name: "Change shell via chsh for users to use ZSH"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.shell: |
     usermod --shell /usr/bin/zsh {{ item.key }}

@@ -1,5 +1,5 @@
 ---
-- name: Openzfs/zfs > git clean # noqa: command-instead-of-module
+- name: "Openzfs/zfs > git clean # noqa: command-instead-of-module"
   ansible.builtin.shell: |
     git clean -fx
   args:
@@ -8,7 +8,7 @@
   register: git_clean
   changed_when: git_clean.rc == 0
 
-- name: Openzfs/zfs > ./autogen.sh
+- name: "Openzfs/zfs > ./autogen.sh"
   ansible.builtin.shell: |
     ./autogen.sh
   args:
@@ -17,7 +17,7 @@
   register: autogen
   changed_when: autogen.rc == 0
 
-- name: Openzfs/zfs > ./configure
+- name: "Openzfs/zfs > ./configure"
   ansible.builtin.shell: |
     ./configure --enable-systemd
   args:
@@ -26,7 +26,7 @@
   register: configure
   changed_when: configure.rc == 0
 
-- name: Openzfs/zfs > make -s -j$(nproc) deb-utils deb-dkms
+- name: "Openzfs/zfs > make -s -j$(nproc) deb-utils deb-dkms"
   ansible.builtin.shell: |
     make -j$(nproc) deb-utils deb-dkms
   args:

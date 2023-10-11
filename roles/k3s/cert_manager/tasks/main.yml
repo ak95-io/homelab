@@ -1,10 +1,10 @@
 ---
-- name: Prepare cert-manager values.yml
+- name: "Prepare cert-manager values.yml"
   ansible.builtin.copy:
     src: cert-manager-values.yml
     dest: /opt/monitoring/cert-manager-values.yml
 
-- name: Install cmctl
+- name: "Install cmctl"
   ansible.builtin.shell: |
     curl -sSL -o cmctl.tar.gz https://github.com/cert-manager/cert-manager/releases/download/$(curl --silent "https://api.github.com/repos/cert-manager/cert-manager/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/')/cmctl-linux-amd64.tar.gz
     tar -xf cmctl.tar.gz
@@ -13,12 +13,12 @@
   args:
     creates: /usr/local/bin/cmctl
 
-- name: Install cert-manager.io repo
+- name: "Install cert-manager.io repo"
   ansible.builtin.shell: |
     helm repo add jetstack https://charts.jetstack.io
     helm repo update
 
-- name: Install cert-manager.io
+- name: "Install cert-manager.io"
   ansible.builtin.shell: |
     helm upgrade --install cert-manager jetstack/cert-manager \
       --namespace cert-manager \
@@ -27,13 +27,13 @@
   args:
     chdir: /opt/monitoring/
 
-- name: Template cert-manager-cluster-isser.yml
+- name: "Template cert-manager-cluster-isser.yml"
   ansible.builtin.template:
     src: cert-manager-cluster-isser.yml.j2
     dest: /opt/monitoring/cert-manager-cluster-isser.yml
 
 # WAIT FOR CMCTL
-- name: Deploy cert-manager-cluster-isser.yml
+- name: "Deploy cert-manager-cluster-isser.yml"
   become: true
   retries: 24
   delay: 5

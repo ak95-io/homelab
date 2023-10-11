@@ -1,5 +1,5 @@
 ---
-- name: Configure GRUB
+- name: "Configure GRUB"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.lineinfile:
     dest: /etc/default/grub

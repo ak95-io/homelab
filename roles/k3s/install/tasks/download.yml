@@ -1,18 +1,18 @@
 ---
-- name: Get latest k3s-io/k3s tag
+- name: "Get latest k3s-io/k3s tag"
   ansible.builtin.uri:
     url: https://api.github.com/repos/k3s-io/k3s/releases/latest
     return_content: true
   register: json_reponse
   run_once: true
 
-- name: Store Master node-token
+- name: "Store Master node-token"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.set_fact:
     k3s_latest: "{{ json_reponse.json.tag_name }}"
   run_once: true
 
-- name: Download k3s binary x64
+- name: "Download k3s binary x64"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.get_url:
     url: https://github.com/k3s-io/k3s/releases/download/{{ k3s_version | default(k3s_latest) }}/k3s

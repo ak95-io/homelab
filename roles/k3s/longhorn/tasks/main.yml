@@ -1,15 +1,15 @@
 ---
-- name: Prepare Longhorn values.yml
+- name: "Prepare Longhorn values.yml"
   ansible.builtin.template:
     src: longhorn-values.yml.j2
     dest: /opt/monitoring/longhorn-values.yml
 
-- name: Install Longhorn repo
+- name: "Install Longhorn repo"
   ansible.builtin.shell: |
     helm repo add longhorn https://charts.longhorn.io
     helm repo update
 
-- name: Install Longhorn
+- name: "Install Longhorn"
   ansible.builtin.shell: |
     helm upgrade --install longhorn longhorn/longhorn \
       --namespace longhorn-system \

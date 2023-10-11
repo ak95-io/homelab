@@ -11,7 +11,7 @@
   loop_control:
     label: "{{ item.0.key }}"
 
-- name: Add .ssh/config file
+- name: "Add .ssh/config file"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.template:
     src: ssh_config.j2
@@ -23,7 +23,7 @@
   loop_control:
     label: "{{ item.key }}"
 
-- name: Add private keys to the users
+- name: "Add private keys to the users"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.copy:
     content: "{{ item.1.private | replace('\\n', '\n') }}"
@@ -39,7 +39,7 @@
     label: "{{ item.0.key }}"
   when: item.0.value.ssh.keys is defined
 
-- name: Add public keys to the users
+- name: "Add public keys to the users"
   become: "{{ __become | default(true) | bool }}"
   ansible.builtin.copy:
     content: "{{ item.1.public | replace('\\n', '\n') }}"

@@ -11,7 +11,7 @@
 - name: "Run sudoers tasks"
   ansible.builtin.include_tasks: "sudoers.yml"
 
-- name: Run scripts tasks
+- name: "Run scripts tasks"
   ansible.builtin.include_tasks: "scripts.yml"
 
 - name: "Run crontab tasks"
