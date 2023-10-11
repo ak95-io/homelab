@@ -10,8 +10,9 @@ fixes=0
 
 # Fail if no args provided
 if [ -z "$1" ]; then
-  echo "Usage: [DEBUG=0] [DRY_RUN=0] $0 <path> $(find $1 -type file \( -name '*.yaml' -o -name '*.yml' \))"
-  echo "Usage: [DEBUG=0] [DRY_RUN=0] $0 <path> roles/**/*.yml"
+  echo "Usage: "
+  echo "  [DEBUG=0] [DRY_RUN=0] $0 <path> \$(find roles -type file \( -name '*.yaml' -o -name '*.yml' \))"
+  echo "  [DEBUG=0] [DRY_RUN=0] $0 <path> roles/**/*.yml"
   exit 1
 fi
 
