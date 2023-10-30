@@ -1,0 +1,42 @@
+---
+version: 22.03
+link_base: https://downloads.openwrt.org/releases
+arch: arm_cortex-a9_vfpv3-d16
+
+packages:
+  - name: zlib
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/base/"
+  - name: libpython3-3.10
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: python3-base
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: coreutils
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: coreutils-base64
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: libbz2-1.0
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/base/"
+  - name: libffi
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: librt
+    link: "{{link_base}}/{{version}}.0/targets/mvebu/cortexa9/packages/"
+  - name: libuuid1
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/base/"
+  - name: python3-email
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: python3-light
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: python3-logging
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: python3-distutils
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: python3-multiprocessing
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: shadow-common
+    link: "{{link_base}}/{{version}}.0/packages/{{arch}}/packages/"
+  - name: shadow-usermod
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+  - name: python3-urllib
+    link: "{{link_base}}/packages-{{version}}/{{arch}}/packages/"
+
+# zlib libpython3-3.10 python3-base coreutils coreutils-base64 libbz2-1.0 libffi librt libuuid1 python3-email python3-light python3-logging python3-distutils python3-multiprocessing shadow-common shadow-usermod python3-urllib

@@ -1,0 +1,7 @@
+---
+- name: Add dropbear authorized_keys
+  ansible.builtin.lineinfile:
+    path: /etc/dropbear/authorized_keys
+    line: "{{ item }}"
+    create: true
+  loop: "{{ authorized_keys }}"

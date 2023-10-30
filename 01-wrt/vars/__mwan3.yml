@@ -1,0 +1,101 @@
+---
+mwan3:
+  globals:
+    - __type: globals
+      __root: mwan3
+      __name: globals
+      __fields:
+        logging: 1
+        loglevel: 'notice'
+
+  interface:
+    - __type: interface
+      __root: mwan3
+      __name: wanmain
+      __fields:
+        enabled: 1
+        family: ipv4
+        initial_state: online
+        track_ip:
+          - 1.1.1.1
+          - 1.0.0.1
+        track_method: ping
+        size: 56
+        max_ttl: 60
+        reliability: 2
+        timeout: 3
+        interval: 3
+        failure_interval: 3
+        recovery_interval: 3
+        down: 2
+        up: 2
+        count: 2
+        flush_conntrack:
+          - ifup
+          - ifdown
+          - connected
+          - disconnected
+    - __type: interface
+      __root: mwan3
+      __name: wanbackup
+      __fields:
+        enabled: 1
+        family: ipv4
+        initial_state: online
+        track_ip:
+          - 1.1.1.1
+          - 1.0.0.1
+        track_method: ping
+        size: 56
+        max_ttl: 60
+        reliability: 2
+        timeout: 3
+        interval: 3
+        failure_interval: 3
+        recovery_interval: 3
+        down: 2
+        up: 2
+        count: 2
+        flush_conntrack:
+          - ifup
+          - ifdown
+          - connected
+          - disconnected
+
+  member:
+    - __type: member
+      __root: mwan3
+      __name: wanmain_m1_w3
+      __fields:
+        interface: wanmain
+        metric: 1
+        weight: 3
+    - __type: member
+      __root: mwan3
+      __name: wanbackup_m2_w6
+      __fields:
+        interface: wanbackup
+        metric: 2
+        weight: 6
+
+  policy:
+    - __type: policy
+      __root: mwan3
+      __name: balanced
+      __fields:
+        last_resort: unreachable
+        use_member:
+          - wanmain_m1_w3
+          - wanbackup_m2_w6
+
+  rule:
+    - __type: rule
+      __root: mwan3
+      __name: default
+      __fields:
+        dest_ip: 0.0.0.0/0
+        use_policy: balanced
+        family: ipv4
+        proto: all
+        src_ip: 0.0.0.0/0
+        sticky: 0

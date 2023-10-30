@@ -1,0 +1,8 @@
+---
+- name: Commit uhttpd changes
+  ansible.builtin.shell: |
+    uci commit uhttpd
+
+- name: Restart uhttpd
+  ansible.builtin.shell: |
+    /etc/init.d/uhttpd restart

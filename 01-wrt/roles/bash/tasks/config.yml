@@ -1,0 +1,4 @@
+---
+- name: Setup bash
+  ansible.builtin.shell: |
+    chsh -s /bin/bash

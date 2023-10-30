@@ -1,0 +1,4 @@
+---
+- name: Commit firewall changes
+  ansible.builtin.shell: |
+    uci commit firewall

@@ -1,0 +1,7 @@
+---
+- name: Install
+  hosts: "{{ 'localhost' }}"
+  vars_files:
+    - vars/packages.yml
+  roles:
+    - { role: install }

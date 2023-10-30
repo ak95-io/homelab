@@ -1,0 +1,6 @@
+---
+- name: Make clean workspace
+  ansible.builtin.shell: |
+    uci revert mwan3
+    for line in $(uci show mwan3 | sed '1!G;h;$!d' | cut -f1 -d"="); do echo $line; uci delete $line; done
+

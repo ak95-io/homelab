@@ -1,0 +1,15 @@
+---
+- name: Install packages
+  community.general.opkg:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  retries: 5
+  delay: 1
+  register: result
+  until: result is succeeded
+  loop:
+    - mwan3
+    - luci-app-mwan3
+  when:
+    - skip_install | default(false) == false

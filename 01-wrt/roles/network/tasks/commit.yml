@@ -1,0 +1,4 @@
+---
+- name: Commit network changes
+  ansible.builtin.shell: |
+    uci commit network

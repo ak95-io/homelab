@@ -1,0 +1,27 @@
+---
+- name: Add password.auth
+  ansible.builtin.lineinfile:
+    path: /etc/openvpn/password.auth
+    line: "{{ item }}"
+    create: true
+  loop: "{{ openvpn_credentials }}"
+  no_log: true
+
+- name: Copy up.sh
+  ansible.builtin.copy:
+    src: up.sh
+    dest: /etc/openvpn/up.sh
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Copy ProtonVPN configs
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/etc/openvpn/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - regular-es.ovpn
+    - secure-es.ovpn

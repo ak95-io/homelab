@@ -1,0 +1,24 @@
+---
+- name: All in one playbook
+  hosts: "{{ target | default('nas.dc0.ak95.io') }}"
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: users }
+    - { role: fix_systemd_network }
+    - { role: fix_systemd_motd }
+    - { role: apps }
+    - { role: unattended_upgrades }
+
+    - { role: mainline }
+    - { role: zfs_source, zfs_version: "zfs-2.1.12" }
+    - { role: sanoid_source }
+
+    - { role: htoprc }
+    - { role: docker }
+    - { role: pyenv }
+    - { role: yt_functions }
+    - { role: backblaze_cli }
+    - { role: deluge_server }
+
+    - { role: sanoid_config, sanoid_pools: ["cheetah", "elephant"]}

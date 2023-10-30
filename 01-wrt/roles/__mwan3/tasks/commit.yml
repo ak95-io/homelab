@@ -1,0 +1,4 @@
+---
+- name: Commit mwan3 changes
+  ansible.builtin.shell: |
+    uci commit mwan3

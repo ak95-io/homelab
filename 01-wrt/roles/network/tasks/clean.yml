@@ -1,0 +1,5 @@
+---
+- name: Make clean workspace
+  ansible.builtin.shell: |
+    uci revert network
+    for line in $(uci show network | sed '1!G;h;$!d' | cut -f1 -d"="); do echo $line; uci delete $line; done

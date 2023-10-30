@@ -1,0 +1,116 @@
+---
+all:
+  hosts:
+    nas.dc0.ak95.io:
+      ansible_user: aam
+      users_to_setup:
+        aam:
+          skip_create: true
+          ssh:
+            authorized_keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCPCeqDxLSZz/1BVTQu62dU+D+mowjZc3aNE1HGbnUo aamkye@github.com
+          sudoers: |
+            aam ALL=(ALL) NOPASSWD:ALL
+        operations:
+          uid: 2000
+          gid: 2000
+          ssh:
+            authorized_keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCPCeqDxLSZz/1BVTQu62dU+D+mowjZc3aNE1HGbnUo aamkye@github.com
+            keys:
+              - name: ssh.ecdsa.operations
+                private: !vault |
+                  $ANSIBLE_VAULT;1.2;AES256;id-08-10-23
+                  61343663646630623665383537343635653439383964386566636331313962336565326263386334
+                  3639616637353433323235333230633664323964373661330a313434626538343035346534306532
+                  66653932616534303531306237633138386164363836333061326166643230396331663665613638
+                  6662373964663065610a303565303834616638623435646564343730376533333538663336366437
+                  36353665396262313839623563613566386433336163663931346439303665623336666139613836
+                  66313434396631376562383763653464663530366535623333623164363031613661306130323236
+                  65323139393561373266663566613965323066613836633039306662373837653434343965333836
+                  32353737313366616236343165396665313935363865323130393564623037333463323234393062
+                  36653465623865633362303438616465396466333161323031313566356662373237326638363838
+                  30613235333466393366346161366334353236333733346635393033633862303932393031303562
+                  62353533663262323162313633663532613466623535376432626164656531613564653430366132
+                  39336130636333333533306237306364643038653636333434383662316239366637353439336337
+                  39633739623734656331646535383836643437356235613634346133616137313439316663343566
+                  36373330373864353837356133383662356236383736346233643935646661346232346237316330
+                  33663038363033313535623466343531386635306263353337393934383662323639303238333031
+                  36623932626534613366363434663266663634663334663266333465343338366530356631393832
+                  66643237396435386334303461613331343266616236363530626236633737373435356435343237
+                  33383035363439616236623935363934623233376564396531346564333930633564366434336639
+                  38343233643431626335653734343465656362333539636262623435313837303061356531356435
+                  62333531373562386232653462323037323731616638306138633861303461303661353864343263
+                  39343564323061376532353561316439623961613630303239373538333533353265306534656532
+                  63636334613035336264313434653039653630333434663134376636363761663731373664343933
+                  61353731363264373930326138616564633533613462386136613634393430343263393334616366
+                  30353730303065653536633438653864306661396566363363396531303232636138363365396663
+                  61346534623931343531653563383763636262656361373161393961646639636665
+                public: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJjM2pS6OKJALsqu7ES5h7TfjM5ZLm6ovBIg2c9ictp7 operations
+            config_addons:
+              - |
+                Host backup backup.dc0.ak95.io
+                  User operations
+                  IdentityFile ~/.ssh/ssh.ecdsa.operations.priv
+                  IdentitiesOnly yes
+          crontab: |
+            0 1 * * * /home/operations/.bin/syncoid.backup.sh
+            0 0 * * * /home/operations/.bin/partition.backup.sh
+          scripts:
+            - syncoid.backup.sh
+            - partition.backup.sh
+          sudoers: |
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs list -o name\,origin -t filesystem\,volume -Hr *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H syncoid\:sync *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -nvP *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t bookmark guid\,creation *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -I *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs send -nvP -I *
+    backup.dc0.ak95.io:
+      ansible_user: aam
+      users_to_setup:
+        aam:
+          skip_create: true
+          ssh:
+            authorized_keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCPCeqDxLSZz/1BVTQu62dU+D+mowjZc3aNE1HGbnUo aamkye@github.com
+          sudoers: |
+            aam ALL=(ALL) NOPASSWD:ALL
+        operations:
+          uid: 2000
+          gid: 2000
+          ssh:
+            authorized_keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCPCeqDxLSZz/1BVTQu62dU+D+mowjZc3aNE1HGbnUo aamkye@github.com
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJjM2pS6OKJALsqu7ES5h7TfjM5ZLm6ovBIg2c9ictp7 operations
+          crontab: |
+            0 0 * * * /home/operations/.bin/partition.backup.sh
+          scripts:
+            - partition.backup.sh
+          sudoers: |
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zpool get -o value -H feature@extensible_dataset *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H name *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -F *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs receive -s -F *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H receive_resume_token *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H -p used *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H receive_resume_token *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 -t snapshot guid\,creation *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -Hpd 1 type\,guid\,creation *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs get -H -p used *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs rollback -R *
+            operations ALL=(ALL) NOPASSWD:/usr/sbin/zfs destroy *
+
+    weather-station-00.dc0.ak95.io:
+      ansible_user: aam
+    weather-station-01.dc0.ak95.io:
+      ansible_user: aam
+
+managable:
+  hosts:
+    nas.dc0.ak95.io:
+    backup.dc0.ak95.io:

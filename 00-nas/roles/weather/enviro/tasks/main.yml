@@ -1,0 +1,41 @@
+---
+- name: "Install enviro-python"
+  become: "{{ __become | default(true) | bool }}"
+  ansible.builtin.shell: |
+    apt update && \
+    apt upgrade -y && \
+
+    # reboot
+
+    apt update && \
+    apt install make gcc python3 python3-venv python3-wheel python3-dev python-is-python3 libportaudio2 -y && \
+    mkdir -p /opt/ && cd /opt/ && \
+    python -m venv /opt/venv && \
+    source /opt/venv/bin/activate
+
+    echo "source /opt/venv/bin/activate" >> /home/aam/.bashrc && \
+    echo "source /opt/venv/bin/activate" >> /root/.bashrc
+
+    cat <<EOF > /boot/config.txt
+    dtoverlay=pi3-miniuart-bt
+    dtoverlay=adau7002-simple
+    dtparam=i2c1=on
+    dtparam=i2c=on
+    dtparam=i2c_arm=on
+    dtparam=i2c_vc
+    device_tree_param=i2c=on1=on
+    dtparam=spi=on
+    EOF
+
+    cat <<EOF > /etc/modules
+    i2c-dev
+    EOF
+
+    #reboot
+
+    cd /opt
+
+    wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Regular/UbuntuMonoNerdFontMono-Regular.ttf && \
+    git clone https://github.com/aamkye/enviroplus_exporter.git && \
+    cd /opt/enviroplus_exporter && \
+    make all

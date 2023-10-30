@@ -1,0 +1,5 @@
+---
+- name: Make clean workspace
+  ansible.builtin.shell: |
+    uci revert openvpn
+    for line in $(uci show openvpn | sed '1!G;h;$!d' | cut -f1 -d"="); do echo $line; uci delete $line; done

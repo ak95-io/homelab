@@ -1,0 +1,161 @@
+---
+dhcp:
+  lan:
+    - __type: dhcp
+      __root: dhcp
+      __name: lan
+      __fields:
+        interface: lan
+        start: 10.255.100.0
+        limit: 256
+        leasetime: 5m
+        dhcpv4: server
+        dhcp_option:
+          - '6,10.255.0.1'
+          - '3,10.255.0.1'
+
+  host:
+    # --- Hardware ---
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: router
+        mac: !vault |
+          $ANSIBLE_VAULT;1.2;AES256;id-08-10-23
+          38326237623164326565346231613764373136666462306462653536313561616462613935333331
+          3066613831613237636436383034346339623031353036630a653834373761666563303764323832
+          30643064366630336431306338313439653538353062633631343536646535333061346266626262
+          3632303734303661300a373565313962633364636664376366396631613233393337393033643534
+          32313139323635393737323730323838653938626338643331613062666536656631
+        ip: 10.255.0.1
+
+    # --- THIS IS STATIC IP ---
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: nas
+        mac: 9A:EF:39:28:BE:36
+        ip: 10.255.0.2
+
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: backup
+        mac: B6:1B:B5:AB:15:7F
+        ip: 10.255.0.3
+
+    # --- Wifi ---
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: deco0
+        mac: C0:06:C3:D4:D8:CC
+        ip: 10.255.0.10
+
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: deco1
+        mac: C0:06:C3:D4:D6:50
+        ip: 10.255.0.11
+
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: deco2
+        mac: C0:06:C3:D4:DA:3C
+        ip: 10.255.0.12
+
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: tapo-desk
+        mac: 34:60:F9:AC:AA:9F
+        ip: 10.255.0.20
+
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: tapo-tv
+        mac: 9C:53:22:29:D2:9B
+        ip: 10.255.0.21
+
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: tapo-router
+        mac: 9C:53:22:29:EF:FE
+        ip: 10.255.0.22
+
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: tapo-server
+        mac: 30:DE:4B:37:08:9D
+        ip: 10.255.0.23
+
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: tapo-angie
+        mac: 30:DE:4B:37:08:C9
+        ip: 10.255.0.24
+
+    # --- Weather stations ---
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: weather-station-00
+        mac: E4:5F:01:92:C1:91
+        ip: 10.255.0.30
+
+    - __type: host
+      __root: dhcp
+      __fields:
+        name: weather-station-01
+        mac: E4:5F:01:92:C1:FF
+        ip: 10.255.0.31
+
+  domain:
+    # - __type: domain
+    #   __root: dhcp
+    #   __fields:
+    #     name: dd7.dc0.ak95.io
+    #     ip: 10.255.0.2
+
+    # - __type: domain
+    #   __root: dhcp
+    #   __fields:
+    #     name: grafana.dc0.ak95.io
+    #     ip: 10.255.60.0
+
+    # - __type: domain
+    #   __root: dhcp
+    #   __fields:
+    #     name: prometheus.dc0.ak95.io
+    #     ip: 10.255.60.0
+
+    # - __type: domain
+    #   __root: dhcp
+    #   __fields:
+    #     name: longhorn.dc0.ak95.io
+    #     ip: 10.255.60.0
+
+  dnsmasq:
+    - __type: dnsmasq
+      __root: dhcp
+      __fields:
+        domainneeded: 1
+        localise_queries: 1
+        local: /dc0.ak95.io/
+        domain: dc0.ak95.io
+        expandhosts: 1
+        authoritative: 1
+        leasefile: /tmp/dhcp.leases
+        localservice: 1
+        ednspacket_max: 1232
+        confdir: /tmp/dnsmasq.d
+        cachesize: 1000
+        rebind_protection: 0
+        allservers: 1
+        server: "127.0.0.1#54"

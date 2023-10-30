@@ -1,0 +1,17 @@
+---
+- name: Install packages
+  community.general.opkg:
+    name: "{{ item }}"
+    state: present
+  retries: 5
+  delay: 1
+  register: result
+  until: result is succeeded
+  loop:
+    - prometheus-node-exporter-lua
+    - prometheus-node-exporter-lua-nat_traffic
+    - prometheus-node-exporter-lua-netstat
+    - prometheus-node-exporter-lua-openwrt
+    - prometheus-node-exporter-lua-textfile
+  when:
+    - skip_install | default(false) == false

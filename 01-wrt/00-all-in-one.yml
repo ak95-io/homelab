@@ -1,0 +1,19 @@
+---
+- name: Setup all
+  hosts: "{{ target | default('192.168.1.1') }}"
+  vars_files:
+    - vars/dhcp.yml
+    - vars/dropbear.yml
+    - vars/firewall.yml
+    - vars/main.yml
+    - vars/network.yml
+    - vars/wireless.yml
+  roles:
+    - { role: network }
+    - { role: dropbear }
+    - { role: wireless }
+    - { role: nextdns }
+    - { role: dhcp }
+    - { role: firewall }
+    - { role: uhttpd }
+    # - { role: reboot }

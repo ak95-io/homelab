@@ -1,0 +1,4 @@
+---
+- name: Commit wireless changes
+  ansible.builtin.shell: |
+    uci commit wireless

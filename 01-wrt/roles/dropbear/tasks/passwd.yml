@@ -1,0 +1,4 @@
+---
+- name: Change root password
+  ansible.builtin.shell: |
+    echo -e "{{ password }}\n{{ password }}" | passwd root

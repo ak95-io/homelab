@@ -1,0 +1,105 @@
+---
+firewall:
+  defaults:
+    - __type: defaults
+      __root: firewall
+      __fields:
+        forward: REJECT
+        input: ACCEPT
+        output: ACCEPT
+        synflood_protect: 1
+        flow_offloading: 1
+        flow_offloading_hw: 1
+
+  zone:
+    - __type: zone
+      __root: firewall
+      __fields:
+        name: lan
+        network:
+          - lan
+        input: ACCEPT
+        output: ACCEPT
+        forward: ACCEPT
+
+    - __type: zone
+      __root: firewall
+      __fields:
+        name: wan
+        network:
+          - wan
+        input: REJECT
+        output: ACCEPT
+        forward: REJECT
+        masq: 1
+        mtu_fix: 1
+
+    - __type: zone
+      __root: firewall
+      __fields:
+        name: vpn
+        network:
+          - vpn
+        input: REJECT
+        output: ACCEPT
+        forward: REJECT
+        masq: 1
+        mtu_fix: 1
+
+    - __type: zone
+      __root: firewall
+      __fields:
+        name: tailscale
+        device:
+          - tailscale0
+        input: ACCEPT
+        output: ACCEPT
+        forward: ACCEPT
+        masq: 1
+        mtu_fix: 1
+
+  forwarding:
+    - __type: forwarding
+      __root: firewall
+      __fields:
+        src: lan
+        dest: wan
+
+    - __type: forwarding
+      __root: firewall
+      __fields:
+        src: lan
+        dest: vpn
+
+    - __type: forwarding
+      __root: firewall
+      __fields:
+        src: tailscale
+        dest: lan
+
+    - __type: forwarding
+      __root: firewall
+      __fields:
+        src: lan
+        dest: tailscale
+
+    - __type: forwarding
+      __root: firewall
+      __fields:
+        src: tailscale
+        dest: wan
+
+  rule: []
+
+  redirect: []
+
+  nat:
+    - __type: nat
+      __root: firewall
+      __fields:
+        name: tailscale
+        family: ipv4
+        proto: all
+        src: '*'
+        target: MASQUERADE
+        device: tailscale0

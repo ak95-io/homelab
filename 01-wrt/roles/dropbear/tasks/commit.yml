@@ -1,0 +1,4 @@
+---
+- name: Commit dropbear changes
+  ansible.builtin.shell: |
+    uci commit dropbear

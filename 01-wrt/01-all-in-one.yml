@@ -1,0 +1,14 @@
+---
+- name: Post setup
+  hosts: "{{ target | default('router.dc0.ak95.io') }}"
+  vars_files:
+    - vars/acme.yml
+    - vars/main.yml
+    - vars/openvpn.yml
+    - vars/tailscale.yml
+  roles:
+    - { role: bash }
+    - { role: openvpn }
+    - { role: prometheus_exporter }
+    - { role: acme }
+    - { role: tailscale }

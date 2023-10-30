@@ -1,0 +1,7 @@
+---
+- name: Prepare
+  hosts: "{{ 'localhost' }}"
+  vars_files:
+    - vars/packages.yml
+  roles:
+    - { role: prepare }

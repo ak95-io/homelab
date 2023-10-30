@@ -1,0 +1,76 @@
+---
+network:
+  device:
+    - __type: device
+      __root: network
+      __fields:
+        name: br-lan
+        ipv6: 0
+        type: bridge
+        ports:
+          - lan1
+          - lan2
+          - lan3
+          - lan4
+
+    - __type: device
+      __root: network
+      __fields:
+        name: wan
+        ipv6: 0
+        macaddr: 00:00:0A:FF:00:01
+        ports:
+          - wan
+
+  interface:
+    - __type: interface
+      __root: network
+      __name: lan
+      __fields:
+        device: br-lan
+        peerdns: 0
+        proto: static
+        ipaddr: 10.255.0.1
+        netmask: 255.255.128.0
+        # ipaddr-end: 10.255.128.254
+        dhcpv4: server
+        dns:
+          - 1.1.1.1
+          - 1.0.0.1
+
+    # Home DHCP
+    - __type: interface
+      __root: network
+      __name: wan
+      __fields:
+        device: wan
+        proto: dhcp
+        peerdns: 0
+        dns:
+          - 1.1.1.1
+          - 1.0.0.1
+
+    - __type: interface
+      __root: network
+      __name: vpn
+      __fields:
+        device: tun0
+        proto: none
+        peerdns: 0
+
+    - __type: interface
+      __root: network
+      __name: tailscale
+      __fields:
+        device: tailscale0
+        proto: none
+        peerdns: 0
+
+    - __type: interface
+      __root: network
+      __name: loopback
+      __fields:
+        device: lo
+        proto: static
+        ipaddr: 127.0.0.1
+        netmask: 255.0.0.0

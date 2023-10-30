@@ -1,0 +1,5 @@
+---
+- name: Make clean workspace
+  ansible.builtin.shell: |
+    uci revert uhttpd
+    for line in $(uci show uhttpd | sed '1!G;h;$!d' | cut -f1 -d"="); do echo $line; uci delete $line; done

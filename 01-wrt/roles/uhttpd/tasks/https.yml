@@ -1,0 +1,4 @@
+---
+- name: Setup https on uhttpd
+  ansible.builtin.shell: |
+    uci set uhttpd.main.redirect_https=0
